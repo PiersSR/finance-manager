@@ -2,8 +2,14 @@ var express = require('express');
 var router = express.Router();
 var pool = require('../data/config');
 
-router.get("/", function(req, res) {
-    res.send("getExpense method not yet defined.");
+router.get("/", function(request, response) {
+    pool.query("call GetExpense()", function(error, result) {
+        if (error) {
+            response.status(500).json(error.message);
+        }
+
+        response.json(result);
+    })
 });
 
 module.exports = router;
