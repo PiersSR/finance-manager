@@ -2,8 +2,14 @@ var express = require('express');
 var router = express.Router();
 var pool = require('../data/config');
 
-router.post("/", function(req, res) {
-    res.send("deleteIncome method not yet defined.");
+router.post("/", function(request, response) {
+    pool.query("call DeleteIncome(id)", request.body.id, function(error, result) {
+        if (error) {
+            response.status(500).json(error.message);
+        }
+
+        response.json(result);
+    })
 });
 
 module.exports = router;
