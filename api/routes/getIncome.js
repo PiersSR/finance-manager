@@ -5,11 +5,13 @@ var pool = require('../data/config');
 const app = require('../app');
 
 router.get("/", function(request, response) {
-    pool.query('SELECT Amount FROM Income WHERE UserID = ?', 1, (error, result) => {
-        if (error) throw error;
+    pool.query("call GetIncome()", function(error, result) {
+        if (error) {
+            response.status(500).json(error.message);
+        }
 
         response.json(result);
-    });
+    })
 });
 
 module.exports = router;
