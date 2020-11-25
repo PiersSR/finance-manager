@@ -5,9 +5,14 @@ const app = require('../app');
 var pool = require('../data/config');
 
 router.post("/", function(request, response) {
-    pool.query("call AddIncome(?, ?, ?, ?)", [ 1, 1, 25.00, 1 ], function(error, result) {
+    const inUserID = request.body.inUserID;
+    const inCategoryID = request.body.inCategoryID;
+    const inAmount = parseFloat(request.body.inAmount).toFixed(2);
+    const inFrequencyID = request.body.inFrequencyID;
+    console.log(inAmount);
+    pool.query("call AddIncome(?, ?, ?, ?)", [ inUserID, inCategoryID, inAmount, inFrequencyID ], function(error, result) {
         if (error) {
-            response.status(500).json(error.message);
+            response.status(500).json(error.message.toString());
         }
 
         response.json(result);

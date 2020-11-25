@@ -21,11 +21,26 @@ function Dropdown(props) {
         getValues();
     }, []);
     
+    function handleChange(e) {
+        setValue(e.currentTarget.value);
+        
+        switch(props.type) {
+            case "category":
+                props.getCategory(e.currentTarget.value);
+                break;
+            case "frequency":
+                props.getFrequency(e.currentTarget.value);
+                break;
+            default:
+                alert("Dropdown type was not recognised");
+        }
+    }
+
     return (
         <select 
             disabled={loading}
             value={value}
-            onChange={e => setValue(e.currentTarget.value)}
+            onChange={handleChange}
         >
             {items.map(({ label, value }) => (
                 <option key={value} value={value}>
