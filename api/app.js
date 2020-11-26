@@ -9,9 +9,13 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testAPIRouter = require('./routes/testAPI');
 var addIncomeRouter = require('./routes/addIncome');
+var addExpenseRouter = require('./routes/addExpense');
 var getIncomeRouter = require('./routes/getIncome');
 var getCategoriesRouter = require('./routes/getCategories');
 var getFrequenciesRouter = require('./routes/getFrequencies');
+var getSummaryRouter = require('./routes/getSummary');
+var getIncomeAndExpensesRouter = require('./routes/getIncomeAndExpenses');
+var getNextUserIdRouter = require('./routes/getNextUserId');
 var app = express();
 
 // view engine setup
@@ -29,9 +33,13 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/testAPI', testAPIRouter);
 app.use('/addIncome', addIncomeRouter);
+app.use('/addExpense', addExpenseRouter);
 app.use('/getIncome', getIncomeRouter);
 app.use('/getCategories', getCategoriesRouter);
 app.use('/getFrequencies', getFrequenciesRouter);
+app.use('/getSummary', getSummaryRouter);
+app.use('/getIncomeAndExpenses', getIncomeAndExpensesRouter);
+app.use('/getNextUserId', getNextUserIdRouter);
 
 app.get('/', function(request, response, next) {
   response.json({msg: 'This is CORS-enables for all origins.'})
