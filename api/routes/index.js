@@ -1,4 +1,5 @@
 var express = require('express');
+var cookieParser = require('cookie-parser');
 var router = express.Router();
 
 /* GET home page. */
