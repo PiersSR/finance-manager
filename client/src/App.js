@@ -81,8 +81,8 @@ function App(props) {
   
     return (
       <div className="moneymanager">
-        <h1>Money Manager</h1>
         <Cookie />
+        <h1>Money Manager</h1>
         <h2>Summary</h2>
           <Summary
             label="Summary"
