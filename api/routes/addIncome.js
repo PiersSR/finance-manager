@@ -1,22 +1,25 @@
 var express = require('express');
 var router = express.Router();
-var mysql = require('mysql');
-const app = require('../app');
 var pool = require('../data/config');
 
 router.post("/", function(request, response) {
-    const inUserID = request.body.inUserID;
-    const inCategoryID = request.body.inCategoryID;
     const inAmount = parseFloat(request.body.inAmount).toFixed(2);
-    const inFrequencyID = request.body.inFrequencyID;
-    console.log(inAmount);
-    pool.query("call AddIncome(?, ?, ?, ?)", [ inUserID, inCategoryID, inAmount, inFrequencyID ], function(error, result) {
-        if (error) {
-            response.status(500).json(error.message.toString());
+    
+    pool.query("call AddIncome(?, ?, ?, ?)",
+        [ 
+            request.body.inUserID, 
+            request.body.inCategoryID,
+            inAmount,
+            request.body.inFrequencyID 
+        ],
+        function(error, result) {
+            if (error) {
+                response.status(400).send( { message: 'Something went wrong whilst adding  an income: ' + error.message });
+            } else {
+                response.status(200).json(result);
+            }
         }
-
-        response.json(result);
-    })
+    )
 });
 
 module.exports = router;
