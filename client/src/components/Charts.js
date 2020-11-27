@@ -5,11 +5,11 @@ function Charts(props) {
     const chartData = [
         {
           "name": "TotalIncome",
-          "value": props.summary[0].TotalIncome
+          "value": props.summary.TotalIncome
         },
         {
           "name": "TotalExpenses",
-          "value": props.summary[0].TotalExpenses
+          "value": props.summary.TotalExpenses
         }
     ];    
 

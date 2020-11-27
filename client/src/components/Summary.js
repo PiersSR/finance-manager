@@ -5,7 +5,7 @@ function Summary(props) {
     return(
         <form>
             <label>{props.label}</label>
-            <input type="text" value={props.summary[0].Summary} readOnly>
+            <input type="text" value={props.summary.Summary} readOnly>
             </input>
         </form>
     );
