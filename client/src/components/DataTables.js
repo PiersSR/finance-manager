@@ -4,7 +4,12 @@ import DataTable from 'react-data-table-component';
 const incomeColumns = [
     {
         name: 'Income',
-        selector: 'Income',
+        selector: 'amount',
+        sortable: true,
+    },
+    {
+        name: 'Category',
+        selector: 'Category',
         sortable: true,
     }
 ]
@@ -12,25 +17,28 @@ const incomeColumns = [
 const expenseColumns =   [ 
     {
         name: 'Expense',
-        selector: 'Expense',
+        selector: 'amount',
         sortable: true,
+    },
+    {
+        name: 'Category',
+        selector: 'Category',
+        sortable: true
     }
 ]
 
 function DataTables(props) {
-    const data = props.data;
-
     return (
         <div>
             <DataTable
                 title="Income"
                 columns={incomeColumns}
-                data={data}
+                data={props.income}
             />
             <DataTable
                 title="Expenses"
                 columns={expenseColumns}
-                data={data}
+                data={props.expenses}
             />
         </div>
     );

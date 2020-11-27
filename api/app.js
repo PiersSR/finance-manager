@@ -6,17 +6,12 @@ var logger = require('morgan');
 var cors = require('cors');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var testAPIRouter = require('./routes/testAPI');
-var addIncomeRouter = require('./routes/addIncome');
-var addExpenseRouter = require('./routes/addExpense');
-var addUserRouter = require('./routes/addUser');
-var getIncomeRouter = require('./routes/getIncome');
-var getCategoriesRouter = require('./routes/getCategories');
-var getFrequenciesRouter = require('./routes/getFrequencies');
-var getSummaryRouter = require('./routes/getSummary');
-var getIncomeAndExpensesRouter = require('./routes/getIncomeAndExpenses');
-var getNextUserIdRouter = require('./routes/getNextUserId');
+var userRouter = require('./routes/user');
+var expenseRouter = require('./routes/expense');
+var incomeRouter = require('./routes/income');
+var categoriesRouter = require('./routes/categories');
+var frequenciesRouter = require('./routes/frequencies');
 
 var app = express();
 
@@ -32,18 +27,12 @@ app.use(cookiesMiddleware());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/testAPI', testAPIRouter);
-app.use('/addIncome', addIncomeRouter);
-app.use('/addExpense', addExpenseRouter);
-app.use('/getIncome', getIncomeRouter);
-app.use('/getCategories', getCategoriesRouter);
-app.use('/getFrequencies', getFrequenciesRouter);
-app.use('/getSummary', getSummaryRouter);
-app.use('/getIncomeAndExpenses', getIncomeAndExpensesRouter);
-app.use('/getNextUserId', getNextUserIdRouter);
-app.use('/addUser', addUserRouter);
-
+app.use('/user', userRouter);
+app.use('/expense', expenseRouter);
+app.use('/income', incomeRouter);
+app.use('/categories', categoriesRouter);
+app.use('/frequencies', frequenciesRouter);
 
 app.get('/', function(request, response, next) {
   response.json({msg: 'This is CORS-enables for all origins.'})

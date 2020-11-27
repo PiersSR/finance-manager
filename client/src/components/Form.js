@@ -27,10 +27,10 @@ function Form(props) {
 
         switch(props.type) {
             case "addIncome":
-                props.addIncome(1, amount, CATEGORYID_MAP[category], FREQUENCYID_MAP[frequency]);
+                props.addIncome(amount, CATEGORYID_MAP[category], FREQUENCYID_MAP[frequency]);
                 break;
             case "addExpense":
-                props.addExpense(1, amount, CATEGORYID_MAP[category], FREQUENCYID_MAP[frequency]);
+                props.addExpense(amount, CATEGORYID_MAP[category], FREQUENCYID_MAP[frequency]);
                 break;
             default:
                 alert("Error: Submission type was not recognised.");
@@ -66,7 +66,7 @@ function Form(props) {
         <label>
             Category:
             <Dropdown
-                getRequest="getCategories"
+                getRequest={"categories/" + props.userId} 
                 columnName="Category"
                 type="category"
                 getCategory={getCategory}
@@ -75,7 +75,7 @@ function Form(props) {
         <label>
             Frequency: 
             <Dropdown
-                getRequest="getFrequencies"
+                getRequest={"frequencies/" + props.userId}
                 columnName="Frequency"
                 type="frequency"
                 getFrequency={getFrequency}
