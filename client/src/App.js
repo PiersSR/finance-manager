@@ -7,11 +7,24 @@ import Chart from './components/Chart';
 import Table from './components/Table';
 import Cookies from 'universal-cookie';
 import Header from './components/Header'
+import CategoryForm from './components/CategoryForm'
+import FrequencyForm from './components/FrequencyForm'
 
 function App(props) {
 	const cookies = new Cookies();
 	var cookie = cookies.get('user');
 	const [loading, setLoading] = useState(true);
+
+	const [categories, setCategories] = useState([{
+		Id: null,
+		Value: "N/A"
+	}])
+
+	const [frequencies, setFrequencies] = useState([{
+		Id: null,
+		Value: "N/A"
+	}])
+
 	const [groupedIncome, setGroupedIncome] = useState([{
 		Id: null,
 		Income: "N/A",
@@ -40,11 +53,11 @@ function App(props) {
 		Frequency: "N/A"
 	}])
 
-    const [summary, setSummary] = useState({
+    const [summary, setSummary] = useState([{
 		Summary: 0,
 		TotalIncome: 0,
 		TotalExpenses: 0
-	});
+	}]);
 
 	const [isNewUser, setNewUser] = useState({value: true, isSet: false});
     const [nextUserId, setNextUserId] = useState(null);
@@ -99,10 +112,13 @@ function App(props) {
 
 	/// Gets the incomes and expenses
 	useEffect(() => {
+		getCategories();
+		getFrequencies();
 		getIncome();
 		getExpenses();
 		getGroupedIncome();
 		getGroupedExpenses();
+		setLoading(false);
 	}, [])
 
 	/// Updated the summary values when income or expenses change
@@ -124,13 +140,49 @@ function App(props) {
 			totalExpenses += expenses[j].Amount;
 		}
 
-		setSummary({
+		setSummary([{
 			Summary: (totalIncome - totalExpenses).toFixed(2),
 			TotalIncome: totalIncome.toFixed(2),
 			TotalExpenses: totalExpenses.toFixed(2)
-		});
+		}]);
 	}
 	
+	function getCategories() {
+		async function getValues() {
+            const fetchURL = Config.fetchURL + "categories/" + user.userId;
+            const response = await fetch(fetchURL);
+            const body = await response.json();
+
+            setCategories(body[0].map(
+                (obj) => (
+                    { 
+						Id: obj.CategoryID,
+						Value: obj.Category
+					}
+                ) 
+            ));
+        }
+        getValues();
+	}
+
+	function getFrequencies() {
+		async function getValues() {
+            const fetchURL = Config.fetchURL + "frequencies/" + user.userId;
+            const response = await fetch(fetchURL);
+            const body = await response.json();
+
+            setFrequencies(body[0].map(
+                (obj) => (
+                    { 
+						Id: obj.FrequencyID,
+						Value: obj.Frequency
+					}
+                ) 
+            ));
+        }
+        getValues();
+	}
+
 	///  Gets the grouped income value for the current user
 	function getGroupedIncome() {
 		async function getValue() {
@@ -265,11 +317,10 @@ function App(props) {
 
 		fetch(Config.fetchURL + "user", requestOptions);
 	}
-  
+
 	/// Handles a user's first visit
 	function handleSubmit(e) {
 		e.preventDefault();
-
 		cookies.set('user', { 
 			userId: nextUserId,
 			firstName: user.firstName,
@@ -282,7 +333,10 @@ function App(props) {
 	}
 
 	var newUser = (
-		<form onSubmit={handleSubmit}>
+		<form 
+			className="welcomePage"
+			onSubmit={handleSubmit}
+		>
 			<label>Please enter your name: </label>
 			<input
 				type="text"
@@ -308,88 +362,137 @@ function App(props) {
 
 	var returnUser = (
 		<section className="container">
-			<Header 
+			<Header
 				title={"Money management tool"}
 				name={user.firstName}
 			/>
-			<div className="forms">
-				<div className="form">
+			<div className="formsContainer">
+				<div className="formElement">
 					<h2>Summary</h2>
 					<Summary
 						label="Summary"
-						summary={summary}
+						summary={summary[0]}
 					/>
 				</div>
-				<div className = "form">
+				<div className = "formElement">
 					<h2>Income</h2>
 					<Form 
-						subType="addIncome"
 						type="add"
+						subType="income"
 						userId={user.userId}
 						addIncome={addIncome}
-					/>
-					</div>
-				<div className="form">
+						frequencies={frequencies}
+						categories={categories}
+					/> 
+				</div>
+				<div className="formElement">
 					<h2>Expenses</h2>
 					<Form
-						subType="addExpense"
 						type="add"
+						subType="expense"
 						userId={user.userId}
 						addExpense={addExpense}
+						frequencies={frequencies}
+						categories={categories}
+					/> 
+				</div>
+				<div className="formElement">
+					<h2>Categories</h2>
+					<CategoryForm
+						userId={user.userId}
+						data={categories}
+						getCategories={getCategories}
+					/>
+					<Table
+						title={""}
+						dense={true}
+						type={"categories"}
+						className={""}
+						data={categories}
+						selectableRows={true}
+						scrollHeight="16vh"
+						userId={user.userId}
+					/>
+				</div>
+				<div className="formElement">
+					<h2>Frequencies</h2>
+					<FrequencyForm
+						userId={user.userId}
+						data={frequencies}
+						getFrequencies={getFrequencies}
+					/>
+					<Table
+						title={""}
+						dense={true}
+						type={"frequencies"}
+						className={"formContent"}
+						data={frequencies}
+						selectableRows={true}
+						scrollHeight="16vh"
+						userId={user.userId}
 					/>
 				</div>
 			</div>
 			<div className="charts">
-				<div className="chart">
-					<Chart
-						type={"pieChart"}
-						data={summary}
-					/>
-				</div>
-				<div className="chart">
-					<Chart
-						type={"groupedPieChart"}
-						data={groupedIncome}
-					/>
-				</div>
-				<div className="chart">
-					<Chart
-						type={"groupedPieChart"}
-						data={groupedExpenses}
-					/>
-				</div>
+				<h2>Summary of Total income and expenses</h2>
+				<Chart
+					type={"pieChart"}
+					data={summary}
+				/>
+				<h2>Breakdown of income grouped by category</h2>
+				<Chart
+					type={"groupedPieChart"}
+					data={groupedIncome}
+				/>
+				<h2>Breakdown of expenses grouped by category</h2>
+				<Chart
+					type={"groupedPieChart"}
+					data={groupedExpenses}
+				/>
 			</div>
 			<div className="tables">
 				<div className="table">
 					<Table
 						title={"Income"}
-						type={"Income"}
+						dense={true}
+						type={"income"}
 						data={income}
 						selectableRows={true}
+						scrollHeight="15vh"
+						userId={user.userId}
 					/>
 				</div>
 				<div className="table">
 					<Table
 						title={"Expenses"}
-						type={"Expenses"}
+						dense={true}
+						type={"expenses"}
 						data={expenses}
 						selectableRows={true}
+						scrollHeight="15vh"
+						userId={user.userId}
 					/>
 				</div>
 				<div className="table">
 					<Table
 						title="Income grouped by Category and Frequency"
-						type={"Income"}
+						dense={true}
+						type={"income"}
 						data={groupedIncome}
 						selectableRows={false}
+						scrollHeight="15vh"
+						userId={user.userId}
 					/>
 				</div>
 				<div className="table">
 					<Table
 						title={"Expenses grouped by Category and Frequency"}
-						type={"Expenses"}
+						dense={true}
+						type={"expenses"}
 						data={groupedExpenses}
 						selectableRows={false}
+						scrollHeight="15vh"
+						userId={user.userId}
 					/>
 				</div>
 			</div>

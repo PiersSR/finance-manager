@@ -7,12 +7,38 @@ router.param('userId', function(request, response, next, id) {
     next();
 })
 
+router.param('categoryId', function(request, response, next, id) {
+    request.categoryId = id;
+    next();
+})
+
+router.route('/:userId/:categoryId')
+    .all(function(request, response, next) {
+        next();
+    })
+    .delete(function(request, response, next) {
+        pool.query("CALL DeleteCategory(?, ?)",
+            [
+                request.categoryId,
+                request.userId
+            ],
+            function(error, result) {
+                if (error) {
+                    response.status(400).send({ message: 'Something went wrong whilst deleting a category: ' + error.message })
+                } else {
+                    response.status(200).json(result);
+                }
+            }
+        )
+    })
+
 router.route('/:userId')
     .all(function(request, response, next) {
         next();
     })
     .get(function(request, response, next) {
-        pool.query("call GetCategories()",
+        pool.query("call GetCategories(?)",
+            request.userId,
             function(error, result) {
                 if (error) {
                     response.status(400).send({ message: 'Something went wrong whilst getting categories: ' + error.message });
@@ -23,13 +49,34 @@ router.route('/:userId')
         )
     })
     .put(function(request, response, next) {
-        next(new Error('Put method not implemented'));
+        pool.query("CALL AddCategory(?, ?)",
+            [
+                request.body.inCategory,
+                request.userId
+            ],
+            function(error, result) {
+                if (error) {
+                    response.status(400).send({ message: 'Something went wrong whilst adding a category: ' + error.message });
+                } else {
+                    response.status(200).json(result);
+                }
+            }
+        )
     })
     .post(function(request, response, next) {
-        next(new Error('Post method not implemented'))
-    })
-    .delete(function(request, response, next) {
-        next(new Error('Delete method not implemented'));
+        pool.query("CALL EditCategory(?, ?)",
+            [
+                request.body.inCategoryID,
+                request.body.inCategory
+            ],
+            function(error, result) {
+                if (error) {
+                    response.status(400).send({ message: 'Something went wrong whilst editing a category: ' + error.message });
+                } else {
+                    response.status(200).json(result);
+                }
+            }
+        )
     })
 
 module.exports = router;

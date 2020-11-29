@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Form from './Form';
 import DataTable, { createTheme } from 'react-data-table-component';
+import EditButton from './EditButton';
+import DeleteButton from './DeleteButton';
 
 const incomeColumns = [
     { name: 'Income', selector: 'Amount', sortable: true, },
@@ -14,13 +16,21 @@ const expenseColumns = [
     { name: 'Frequency', selector: 'Frequency', sortable: true, }
 ]
 
+const categoryColumns = [
+    { name: 'Category', selector: 'Value', sortable: false }
+]
+
+const frequencyColumns = [
+    { name: 'Frequency', selector: 'Value', sortable: false }
+]
+
 createTheme('money', {
     text: {
         primary: '#1d3557',
         secondary: '#457b9d',
     },
     background: {
-        default: '#f1faee'
+        default: '#f1faee',
     },
     context: {
         background: '#a8dadc',
@@ -40,30 +50,63 @@ createTheme('money', {
 
 function Table(props) {
     var columns;
+    const [isRowAlreadySelected, toggleRowSelected] = useState(false);
+    const [rowId, setRowId] = useState({Id: null, Value: null});
+
+    function handleChange(e) {
+        setRowId(e.selectedRows.map((obj) => obj.Id)[0])
+        
+        if(e.selectedCount > 1) {
+            toggleRowSelected(!isRowAlreadySelected);
+        }
+    }
 
     switch(props.type) {
-        case "Income":
+        case "income":
             columns = incomeColumns;
             break;
-        case "Expenses":
+        case "expenses":
             columns = expenseColumns;
             break;
+        case "categories":
+            columns = categoryColumns;
+            break;
+        case "frequencies":
+            columns = frequencyColumns;
+            break;
         default:
-            alert("Column type not recognised");
+            alert("Column type" + props.type + "not recognised");
     }
+
     return (
         <div>
             <DataTable
                 title={props.title}
+                dense={props.dense}
+                type={props.type}
                 theme={"money"}
                 columns={columns}
                 data={props.data}
                 highlightOnHover={true}
                 responsive={true}
                 fixedHeader={true}
-                fixedHeaderScrollHeight={"12vh"}
+                fixedHeaderScrollHeight={props.scrollHeight}
                 selectableRows={props.selectableRows}
                 selectableRowsHighlight={true}
+                onSelectedRowsChange={handleChange}
+                clearSelectedRows={isRowAlreadySelected}
+                selectableRowsNoSelectAll={true}
+                selectableRowDisabled={false}
+                contextActions={[
+                    <EditButton 
+                        userId={props.userId}
+                        rowId={rowId}
+                    />,
+                    <DeleteButton
+                        userId={props.userId} 
+                        rowId={rowId}
+                    />
+                ]}
             />
         </div>
     );
