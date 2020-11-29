@@ -7,12 +7,38 @@ router.param('userId', function(request, response, next, id) {
     next();
 })
 
+router.param('frequencyId', function(request, response, next, id) {
+    request.frequencyId = id;
+    next();
+})
+
+router.route('/:userId/:frequencyId')
+    .all(function(request, response, next) {
+        next();
+    })
+    .delete(function(request, response, next) {
+        pool.query("CALL DeleteFrequency(?, ?)",
+            [
+                request.frequencyId,
+                request.userId
+            ],
+            function(error, result) {
+                if (error) {
+                    response.status(400).send({ message: 'Something went wrong whilst deleting a frequency: ' + error.message })
+                } else {
+                    response.status(200).json(result);
+                }
+            }
+        )
+    })
+
 router.route('/:userId')
     .all(function(request, response, next) {
         next();
     })
     .get(function(request, response, next) {
-        pool.query("call GetFrequencies()",
+        pool.query("call GetFrequencies(?)",
+            request.userId,
             function(error, result) {
                 if (error) {
                     response.status(400).send({ message: 'Something went wrong whilst getting frequencies: ' + error.message });
@@ -23,13 +49,34 @@ router.route('/:userId')
         )
     })
     .put(function(request, response, next) {
-        next(new Error('Put method not implemented'));
+        pool.query("CALL AddFrequency(?, ?)",
+            [
+                request.body.inFrequency,
+                request.userId
+            ],
+            function(error, result) {
+                if (error) {
+                    response.status(400).send({ message: 'Something went wrong whilst adding a frequency: ' + error.message });
+                } else {
+                    response.status(200).json(result);
+                }
+            }
+        )
     })
     .post(function(request, response, next) {
-        next(new Error('Post method not implemented'))
-    })
-    .delete(function(request, response, next) {
-        next(new Error('Delete method not implemented'));
+        pool.query("CALL EditFrequency(?, ?)",
+            [
+                request.body.inFrequencyID,
+                request.body.inFrequency
+            ],
+            function(error, result) {
+                if (error) {
+                    response.status(400).send({ message: 'Something went wrong whilst editing a frequency: ' + error.message });
+                } else {
+                    response.status(200).json(result);
+                }
+            }
+        )
     })
 
 module.exports = router;
