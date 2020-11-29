@@ -1,29 +1,43 @@
-import logo from './logo.svg';
 import './App.css';
 import Config from './data/config.js';
 import Form from "./components/Form";
-import Dropdown from "./components/Dropdown";
 import Summary from "./components/Summary";
 import React, { useEffect, useRef, useState } from 'react';
-import { nanoid } from 'nanoid';
-import Charts from './components/Charts';
-import DataTables from './components/DataTables';
+import Chart from './components/Chart';
+import Table from './components/Table';
 import Cookies from 'universal-cookie';
+import Header from './components/Header'
 
 function App(props) {
 	const cookies = new Cookies();
 	var cookie = cookies.get('user');
 	const [loading, setLoading] = useState(true);
-	const [income, setIncome] = useState([{
+	const [groupedIncome, setGroupedIncome] = useState([{
 		Id: null,
-		Income: 'N/A',
-		Category: "General"
+		Income: "N/A",
+		Category: "N/A",
+		Frequency: "N/A"
 	}]);
 
-	const [expenses, setExpense] = useState([{
+	const [groupedExpenses, setGroupedExpenses] = useState([{
 		Id: null,
-		Expense: 'N/A',
-		Category: "General"
+		Income: "N/A",
+		Category: "N/A",
+		Frequency: "N/A"
+	}]);
+
+	const [income, setIncome] = useState([{
+		Id: null,
+		Income: "N/A",
+		Category: "N/A",
+		Frequency: "N/A"
+	}]);
+
+	const [expenses, setExpenses] = useState([{
+		Id: null,
+		Expense: "N/A",
+		Category: "N/A",
+		Frequency: "N/A"
 	}])
 
     const [summary, setSummary] = useState({
@@ -83,10 +97,18 @@ function App(props) {
 		getValue();
 	}, [])
 
-	/// Updates the summary values if income or expenses change
+	/// Gets the incomes and expenses
+	useEffect(() => {
+		getIncome();
+		getExpenses();
+		getGroupedIncome();
+		getGroupedExpenses();
+	}, [])
+
+	/// Updated the summary values when income or expenses change
 	useEffect(() => {
 		getSummary();
-	}, [income, expenses])
+	}, [income, expenses]);
 
 
 	/// Gets the summary values for the current user
@@ -95,40 +117,87 @@ function App(props) {
 		var totalExpenses = 0;
 
 		for (var i in income) {
-			totalIncome += i.Amount;
+			totalIncome += income[i].Amount;
 		}
 
 		for (var j in expenses) {
-			totalExpenses += j.Amount;
+			totalExpenses += expenses[j].Amount;
 		}
 
-		setSummary(totalIncome - totalExpenses);
+		setSummary({
+			Summary: (totalIncome - totalExpenses).toFixed(2),
+			TotalIncome: totalIncome.toFixed(2),
+			TotalExpenses: totalExpenses.toFixed(2)
+		});
 	}
 	
-	///  Gets the income and expenses value for the current user
+	///  Gets the grouped income value for the current user
+	function getGroupedIncome() {
+		async function getValue() {
+			const fetchURL = Config.fetchURL + "income/groups/" + user.userId;
+			const response = await fetch(fetchURL);
+			const body = await response.json();
+			setGroupedIncome(body[0].map(
+				(obj) => ({ 
+					Id: obj.ID,
+					Amount: obj.Amount,
+					Category: obj.Category,
+					Frequency: obj.Frequency 
+				})
+			))
+		}
+		getValue();
+	}
+
+	///  Gets the grouped income value for the current user
+	function getGroupedExpenses() {
+		async function getValue() {
+			const fetchURL = Config.fetchURL + "expense/groups/" + user.userId;
+			const response = await fetch(fetchURL);
+			const body = await response.json();
+			setGroupedExpenses(body[0].map(
+				(obj) => ({ 
+					Id: obj.ID,
+					Amount: obj.Amount,
+					Category: obj.Category,
+					Frequency: obj.Frequency 
+				})
+			))
+		}
+		getValue();
+	}
+
+	///  Gets the income value for the current user
 	function getIncome() {
 		async function getValue() {
             const fetchURL = Config.fetchURL + "income/" + user.userId;
             const response = await fetch(fetchURL);
             const body = await response.json();
 			setIncome(body[0].map(
-				(obj) => (
-					{ amount: obj.Amount, category: obj.Category}
-				)
+				(obj) => ({ 
+					Id: obj.IncomeID,
+					Amount: obj.Amount,
+					Category: obj.Category,
+					Frequency: obj.Frequency 
+				})
 			))
 		}
 		getValue();
 	}
 
-	function getExpense() {
+	/// Gets the expenses value for the current user
+	function getExpenses() {
 		async function getValue() {
             const fetchURL = Config.fetchURL + "expense/" + user.userId;
             const response = await fetch(fetchURL);
             const body = await response.json();
-			setExpense(body[0].map(
-				(obj) => (
-					{ amount: obj.Amount, category: obj.Category}
-				)
+			setExpenses(body[0].map(
+				(obj) => ({
+					Id: obj.ExpenseID,
+					Amount: obj.Amount,
+					Category: obj.Category,
+					Frequency: obj.Frequency
+				})
 			))
 		}
 		getValue();
@@ -149,7 +218,11 @@ function App(props) {
 			})
 		}
 
-		fetch(Config.fetchURL + "income/" + user.userId, requestOptions).then((response) => getIncome());
+		fetch(Config.fetchURL + "income/" + user.userId, requestOptions)
+			.then((response) => {
+				getIncome();
+				getGroupedIncome();
+			});
   	}
 
 	/// @param categoryID: The selected category ID
@@ -168,7 +241,11 @@ function App(props) {
 			})
 		}
 
-		fetch(Config.fetchURL + "expense/" + user.userId, requestOptions).then((response) => getExpense());
+		fetch(Config.fetchURL + "expense/" + user.userId, requestOptions)
+			.then((response) => {
+				getExpenses();
+				getGroupedExpenses();
+			});
 	}
 
 	/// @param userID: The current userID
@@ -230,33 +307,93 @@ function App(props) {
 	);
 
 	var returnUser = (
-		<div className="moneymanager">
-			<h1>Money management tool - {user.firstName}</h1>
-			<h2>Summary</h2>
-			<Summary
-				label="Summary"
-				summary={summary}
+		<section className="container">
+			<Header 
+				title={"Money management tool"}
+				name={user.firstName}
 			/>
-			<h2>Income</h2>
-			<Form 
-				type="addIncome"
-				userId={user.userId}
-				addIncome={addIncome}
-			/>
-			<h2>Expenses</h2>
-			<Form
-				type="addExpense"
-				userId={user.userId}
-				addExpense={addExpense}
-			/>
-			<Charts
-			summary={summary}
-			/>
-			<DataTables
-				income={income}
-				expenses={expenses}
-			/>
-		</div>
+			<div className="forms">
+				<div className="form">
+					<h2>Summary</h2>
+					<Summary
+						label="Summary"
+						summary={summary}
+					/>
+				</div>
+				<div className = "form">
+					<h2>Income</h2>
+					<Form 
+						subType="addIncome"
+						type="add"
+						userId={user.userId}
+						addIncome={addIncome}
+					/>
+					</div>
+				<div className="form">
+					<h2>Expenses</h2>
+					<Form
+						subType="addExpense"
+						type="add"
+						userId={user.userId}
+						addExpense={addExpense}
+					/>
+				</div>
+			</div>
+			<div className="charts">
+				<div className="chart">
+					<Chart
+						type={"pieChart"}
+						data={summary}
+					/>
+				</div>
+				<div className="chart">
+					<Chart
+						type={"groupedPieChart"}
+						data={groupedIncome}
+					/>
+				</div>
+				<div className="chart">
+					<Chart
+						type={"groupedPieChart"}
+						data={groupedExpenses}
+					/>
+				</div>
+			</div>
+			<div className="tables">
+				<div className="table">
+					<Table
+						title={"Income"}
+						type={"Income"}
+						data={income}
+						selectableRows={true}
+					/>
+				</div>
+				<div className="table">
+					<Table
+						title={"Expenses"}
+						type={"Expenses"}
+						data={expenses}
+						selectableRows={true}
+					/>
+				</div>
+				<div className="table">
+					<Table
+						title="Income grouped by Category and Frequency"
+						type={"Income"}
+						data={groupedIncome}
+						selectableRows={false}
+					/>
+				</div>
+				<div className="table">
+					<Table
+						title={"Expenses grouped by Category and Frequency"}
+						type={"Expenses"}
+						data={groupedExpenses}
+						selectableRows={false}
+					/>
+				</div>
+			</div>
+		</section>
 	);
 
   	return isNewUser.value ? newUser : returnUser;
