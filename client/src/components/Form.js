@@ -3,18 +3,14 @@ import Dropdown from './Dropdown';
 
 function Form(props) {
     const [amount, setValue] = useState(0.00);
-    const [category, setCategory] = useState("General");
-    const [frequency, setFrequency] = useState("Monthly");
-
-    const CATEGORYID_MAP = {
-        General: 1,
-        Groceries: 3
-    }
-
-    const FREQUENCYID_MAP = {
-        Monthly: 1,
-        Weekly: 2
-    }
+    const [category, setCategory] = useState({
+        Id: 1,
+        Value: "N/A"
+    });
+    const [frequency, setFrequency] = useState({
+        Id: 1,
+        Value: "N/A"
+    });
 
     /// Handles any changes made to the amount field
     function handleChange(e) {
@@ -24,13 +20,13 @@ function Form(props) {
     /// Handles the form submission event
     function handleSubmit(e) {
         e.preventDefault();
-
+    
         switch(props.subType) {
-            case "addIncome":
-                props.addIncome(amount, CATEGORYID_MAP[category], FREQUENCYID_MAP[frequency]);
+            case "income":
+                props.addIncome(amount, category.Id, frequency.Id);
                 break;
-            case "addExpense":
-                props.addExpense(amount, CATEGORYID_MAP[category], FREQUENCYID_MAP[frequency]);
+            case "expense":
+                props.addExpense(amount, category.Id, frequency.Id);
                 break;
             default:
                 alert("Error: Submission type was not recognised.");
@@ -39,18 +35,21 @@ function Form(props) {
 
     /// @param e: The element holding the current category value
     /// Gets the category to the current selected value in the category dropdown
-    function getCategory(inCategory) {
-        setCategory(inCategory);
+    function getCategory(id, category) {
+        setCategory({ Id: id, Value: category });
     }
 
     /// @param e: The element holding the current frequency value
     /// Gets the category to the current selected value in the frequency dropdown
-    function getFrequency(inFrequency) {
-        setFrequency(inFrequency);
+    function getFrequency(id, frequency) {
+        setFrequency({ Id: id, Value: frequency });
     }
 
     return(
-        <form onSubmit={handleSubmit}>
+        <form 
+            className="formContent"
+            onSubmit={handleSubmit}
+        >
             <label>Amount:</label>
             <input
                 type="number"
@@ -63,19 +62,22 @@ function Form(props) {
             />
             <label>Category:</label>
             <Dropdown
-                getRequest={"categories/" + props.userId} 
                 columnName="Category"
                 type="category"
                 getCategory={getCategory}
+                data={props.categories}
             />
             <label>Frequency:</label>
             <Dropdown
-                getRequest={"frequencies/" + props.userId}
                 columnName="Frequency"
                 type="frequency"
                 getFrequency={getFrequency}
+                data={props.frequencies}
             />
-            <button type="submit">
+            <button 
+                className="addButton"
+                type="submit"
+            >
                 Add
             </button>
         </form>

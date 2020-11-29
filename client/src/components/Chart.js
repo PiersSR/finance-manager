@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { PieChart, Pie, Legend, Tooltip, Cell } from 'recharts';
+import { PieChart, Pie, Legend, Tooltip, Cell, ResponsiveContainer, Label } from 'recharts';
 
 function Chart(props) {
-    const COLORS = [  '#1d3557', '#457b9d', '#a8dadc', '#e63946'];
+    const COLORS = ['#1d3557', '#457b9d', '#a8dadc', '#e63946', '#f72585', '#b5179e', '#7209b7', '#560bad', '#480ca8', '#3a0ca3', '#3f37c9', '#4361ee', '#4895ef', '#4cc9f0'];
   	const chartData = [{
-			"name": "Total Income", "value": parseInt(props.data.TotalIncome)
+			"name": "Total Income", "value": parseFloat(props.data[0].TotalIncome)
 		}, {
-			"name": "Total Expenses", "value": parseInt(props.data.TotalExpenses)
+			"name": "Total Expenses", "value": parseFloat(props.data[0].TotalExpenses)
 		}];
-
+		
 	const groupedChartData = [];
-
-	if (props.type === "groupedPieChart")
-	{
+	
+	if (props.type === "groupedPieChart") {
 		props.data.map(
 			(obj) => (
 				groupedChartData.push({ "name": obj.Category, "value": obj.Amount })
@@ -21,49 +20,60 @@ function Chart(props) {
 	}
 
 	var ungroupedChart = (
-		<div className="chart">
-			<PieChart width={367} height={367}>
+		<ResponsiveContainer
+			className="chart"
+			width={700}
+			height="31.5%"
+		>
+			<PieChart>
 				<Pie 
-				data={chartData}
-				dataKey="value"
-				nameKey="name"
-				cx="50%"
-				cy="50%"
-				outerRadius={100} fill="#f1faee" 
-				animationEasing="linear"
+					label={true}
+					data={chartData}
+					dataKey="value"
+					nameKey="name"
+					cx="50%"
+					cy="50%"
+					outerRadius={100} 
+					animationEasing="linear"
 				>
 					{chartData.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)}
 				</Pie>
-				<Tooltip />
+				<Tooltip 
+					active={true}
+				/>
 				<Legend
-					verticalAlign="center" 
+					verticalAlign="bottom" 
 					height={40} 
 				/>
 			</PieChart>
-		</div>
+		</ResponsiveContainer>
 	);
 
 	var groupedChart = (
-		<div className="chart">
-			<PieChart width={367} height={367}>
+		<ResponsiveContainer
+			className="chart"
+			width={700}
+			height="31.5%"
+		>
+			<PieChart>
 				<Pie 
-				data={groupedChartData}
-				dataKey="value"
-				nameKey="name"
-				cx="50%"
-				cy="50%"
-				outerRadius={100} fill="#f1faee" 
-				animationEasing="linear"
+					label={true}
+					data={groupedChartData}
+					dataKey="value"
+					nameKey="name"
+					cx="50%"
+					cy="50%" 
+					animationEasing="linear"
 				>
-					{chartData.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)}
+					{chartData.map((entry, index) => <Cell fill={COLORS[index]}/>)}
 				</Pie>
 				<Tooltip />
 				<Legend
-					verticalAlign="center" 
+					verticalAlign="bottom" 
 					height={40} 
 				/>
 			</PieChart>
-		</div>
+		</ResponsiveContainer>
 	)
 
 	return props.type === "groupedPieChart" ? groupedChart : ungroupedChart;

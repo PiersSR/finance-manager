@@ -35,7 +35,7 @@ app.use('/categories', categoriesRouter);
 app.use('/frequencies', frequenciesRouter);
 
 app.get('/', function(request, response, next) {
-  response.json({msg: 'This is CORS-enables for all origins.'})
+  response.json({msg: 'This is CORS-enabled for all origins.'})
 })
 
 // catch 404 and forward to error handler
