@@ -25,7 +25,7 @@ function Form(props) {
     function handleSubmit(e) {
         e.preventDefault();
 
-        switch(props.type) {
+        switch(props.subType) {
             case "addIncome":
                 props.addIncome(amount, CATEGORYID_MAP[category], FREQUENCYID_MAP[frequency]);
                 break;
@@ -49,41 +49,35 @@ function Form(props) {
         setFrequency(inFrequency);
     }
 
-    return (
+    return(
         <form onSubmit={handleSubmit}>
-        <label>
-            Amount:
-        </label>
-        <input
-            type="number"
-            name="price"
-            min="0.00"
-            step=".01"
-            autoComplete="off"
-            value={amount}
-            onChange={handleChange}
-        />
-        <label>
-            Category:
+            <label>Amount:</label>
+            <input
+                type="number"
+                name="price"
+                min="0.00"
+                step=".01"
+                autoComplete="off"
+                value={amount}
+                onChange={handleChange}
+            />
+            <label>Category:</label>
             <Dropdown
                 getRequest={"categories/" + props.userId} 
                 columnName="Category"
                 type="category"
                 getCategory={getCategory}
             />
-        </label>
-        <label>
-            Frequency: 
+            <label>Frequency:</label>
             <Dropdown
                 getRequest={"frequencies/" + props.userId}
                 columnName="Frequency"
                 type="frequency"
                 getFrequency={getFrequency}
             />
-        </label>
-        <button type="submit">
-            Add
-        </button>
+            <button type="submit">
+                Add
+            </button>
         </form>
     );
 }

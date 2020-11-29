@@ -37,7 +37,7 @@ function Dropdown(props) {
     }
 
     return (
-        <select 
+        <select className="form"
             disabled={loading}
             value={value}
             onChange={handleChange}
