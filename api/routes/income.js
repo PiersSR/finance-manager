@@ -7,6 +7,24 @@ router.param('userId', function(request, response, next, id) {
     next();
 })
 
+router.route('/groups/:userId')
+    .all(function(request, response, next) {
+        next();
+    })
+    .get(function(request, response, next) {
+        pool.query("call GetIncomeByCategory(?)",
+            request.userId, 
+            function(error, result) {
+                if (error) {
+                    console.log(error.message)
+                    response.status(400).send({ message: 'Something went wrong whilst getting income by category: ' + error.message });
+                } else {
+                    response.status(200).json(result);
+                }
+            }
+        )
+    })
+
 router.route('/:userId')
     .all(function(request, response, next) {
         next();
