@@ -1,35 +1,19 @@
 import React, { useEffect, useState } from 'react';
 
 function Dropdown(props) {
-    const [loading, setLoading] = useState(true);
-    const [items, setItems] = useState([{ label: "Loading...", value: "" }]);
     const [value, setValue] = useState("N/A");
-
-    useEffect(() => {
-        async function getValues() {
-            const fetchURL = 'http://localhost:9000/' + props.getRequest;
-            const response = await fetch(fetchURL);
-            const body = await response.json();
-
-            setItems(body[0].map(
-                (obj) => (
-                    { label: obj[props.columnName], value: obj[props.columnName] }
-                ) 
-            ));
-            setLoading(false);
-        }
-        getValues();
-    }, []);
     
     function handleChange(e) {
         setValue(e.currentTarget.value);
         
+        const id = props.data.find((obj) => obj.Value === e.currentTarget.value).Id;
+
         switch(props.type) {
             case "category":
-                props.getCategory(e.currentTarget.value);
+                props.getCategory(id, e.currentTarget.value);
                 break;
             case "frequency":
-                props.getFrequency(e.currentTarget.value);
+                props.getFrequency(id, e.currentTarget.value);
                 break;
             default:
                 alert("Dropdown type was not recognised");
@@ -37,14 +21,13 @@ function Dropdown(props) {
     }
 
     return (
-        <select className="form"
-            disabled={loading}
-            value={value}
+        <select
             onChange={handleChange}
+            value={value}
         >
-            {items.map(({ label, value }) => (
-                <option key={value} value={value}>
-                    {label}
+            {props.data.map(({ Id, Value }) => (
+                <option key={Id} value={Value}>
+                    {Value}
                 </option>
             ))}
         </select>

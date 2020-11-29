@@ -7,6 +7,31 @@ router.param('userId', function(request, response, next, id) {
     next();
 })
 
+router.param('incomeId', function(request, response, next, id) {
+    request.incomeId = id;
+    next();
+})
+
+router.route('/:userId/:incomeId')
+    .all(function(request, response, next) {
+        next();
+    })
+    .delete(function(request, response, next) {
+        pool.query("CALL DeleteIncome(?, ?)",
+            [
+                request.incomeId,
+                request.userId
+            ],
+            function(error, result) {
+                if (error) {
+                    response.status(400).send({ message: 'Something went wrong whilst deleting an income: ' + error.message })
+                } else {
+                    response.status(200).json(result);
+                }
+            }
+        )
+    })
+
 router.route('/groups/:userId')
     .all(function(request, response, next) {
         next();
@@ -42,7 +67,7 @@ router.route('/:userId')
         )
     })
     .put(function(request, response, next) {
-        const inAmount = parseFloat(request.body.inAmount).toFixed(2)
+        const inAmount = parseFloat(request.body.inAmount).toFixed(2);
 
         pool.query("call AddIncome(?, ?, ?, ?)", 
             [
@@ -61,10 +86,21 @@ router.route('/:userId')
         )
     })
     .post(function(request, response, next) {
-        next(new Error('Post method not implemented'))
-    })
-    .delete(function(request, response, next) {
-        next(new Error('Delete method not implemented'));
+        pool.query("CALL EditExpense(?, ?, ?, ?)",
+            [
+                request.body.inIncomeID,
+                request.userId,
+                request.body.inAmount,
+                request.body.inFrequencyID
+            ],
+            function(error, result) {
+                if (error) {
+                    response.status(400).send( { message: 'Something went wrong whilst editing an income: ' + error.message });
+                } else {
+                    response.status(200).json(result);
+                }
+            }
+        )
     })
 
 module.exports = router;
