@@ -50,6 +50,11 @@ function Table(props) {
         { CategoryId: null, FrequencyId: null }
     );
 
+    function setDisabledRow(row) {
+        if (row.CategoryId === 1 || row.FrequencyId === 1) {
+            return true;
+        }
+    }
     /**
      * Handles changes to the table.
      * @param {*} e The event's data.
@@ -59,9 +64,8 @@ function Table(props) {
         setRowId(e.selectedRows.map((obj) => obj.Id)[0]);
 
         // Get the relevant ids of the selected row.
-
         setRowData((e.selectedRows.map((obj) => ({ CategoryId: obj.CategoryId, FrequencyId: obj.FrequencyId}))[0]));
-        
+
         if(e.selectedCount > 1) {
             toggleRowSelected(!isRowAlreadySelected);
         }
@@ -106,7 +110,7 @@ function Table(props) {
                 onSelectedRowsChange={handleChange}
                 clearSelectedRows={isRowAlreadySelected}
                 selectableRowsNoSelectAll={true}
-                selectableRowDisabled={false}
+                selectableRowDisabled={setDisabledRow}
                 contextActions={[
                     <EditButton 
                         userId={props.userId}

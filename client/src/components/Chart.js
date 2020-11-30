@@ -14,7 +14,7 @@ function Chart(props) {
 	if (props.type === "groupedPieChart") {
 		props.data.map(
 			(obj) => (
-				groupedChartData.push({ "name": obj.Category, "value": parseFloat(obj.Amount) })
+				groupedChartData.push({ "name": obj.Category + " (" + obj.Frequency + ")", "value": parseFloat(obj.Amount) })
 			)
 		)
 	}
