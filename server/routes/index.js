@@ -3,7 +3,6 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log('Hello! Im in the index file');
   res.render('index', { title: __dirname });
 });
 
