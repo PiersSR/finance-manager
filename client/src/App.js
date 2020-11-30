@@ -12,8 +12,9 @@ import FrequencyForm from './components/FrequencyForm'
 
 function App(props) {
 	const cookies = new Cookies();
-	var cookie = cookies.get('user');
 	const [loading, setLoading] = useState(true);
+	const [isNewUser, setNewUser] = useState(true);
+	const [nextUserId, setNextUserId] = useState(null);
 
 	const [categories, setCategories] = useState([{
 		Id: null,
@@ -64,9 +65,7 @@ function App(props) {
 		TotalIncome: 0,
 		TotalExpenses: 0
 	}]);
-
-	const [isNewUser, setNewUser] = useState({value: true, isSet: false});
-    const [nextUserId, setNextUserId] = useState(null);
+	
     const [user, setUser] = useState({
             userId: null,
             firstName: "",
@@ -74,57 +73,33 @@ function App(props) {
             isSet: false
         }
 	);
-
-	if (!isNewUser.isSet) {
-		setNewUser({ value: cookie === undefined ? true : false, isSet: true});
-	}
-
-	if (!isNewUser.value) {
-		cookie = cookies.get('user');
-		if(!user.isSet) {
-			setUser({ 
-				userId: cookie.userId,
-				firstName: cookie.firstName,
-				surname: cookie.surname,
-				isSet: true
-			})
-		}
-	}
-
-  	/**
-	   * Handles changes to form input fields.
-	   * @param {*} e The event's data.
-	   */
-	function handleChange(e) {
-		e.preventDefault();
-      	const value = e.target.value;
-
-      	setUser({
-          	...user,
-          	[e.target.name]: value
-      	});
- 	}
 	
 	/**
-	 * Gets the next user id.
+	 * Checks whether the user is returning or new.
 	 */
 	useEffect(() => {
-		async function getValue() {
+		var cookie = cookies.get('user');
+		console.log(cookie);
+		if (cookie === undefined) {
 			const fetchURL = Config.fetchURL + 'user/';
-			const response = await fetch(fetchURL);
-			const body = await response.json();
-	
-			setNextUserId(body[0][0].UserID);
-			setLoading(false);
+			fetch(fetchURL)
+				.then((response) => response.json())
+				.then((data) => {
+					setNextUserId(data[0][0].UserID);
+				})
+		} else {
+			setUser({ userId: cookie.userId, firstName: cookie.firstName, surname: cookie.surname })
+			getAllValues();
+			setNewUser(false);
 		}
-	
-		getValue();
+
+		setLoading(false);
 	}, [])
 
 	/**
 	 * Gets the incomes and expenses on initial load.
 	 */
-	useEffect(() => {
+	function getAllValues() {
 		getCategories();
 		getFrequencies();
 		getIncome();
@@ -132,7 +107,7 @@ function App(props) {
 		getGroupedIncome();
 		getGroupedExpenses();
 		setLoading(false);
-	}, [])
+	}
 
 	/**
 	 * Updates the summary values when income or expenses change.
@@ -169,7 +144,7 @@ function App(props) {
 	*/ 
 	function getCategories() {
 		async function getValues() {
-            const fetchURL = Config.fetchURL + "categories/" + user.userId;
+            const fetchURL = Config.fetchURL + "categories/" + cookies.get('user').userId;
             const response = await fetch(fetchURL);
             const body = await response.json();
 
@@ -191,7 +166,7 @@ function App(props) {
 	*/
 	function getFrequencies() {
 		async function getValues() {
-            const fetchURL = Config.fetchURL + "frequencies/" + user.userId;
+            const fetchURL = Config.fetchURL + "frequencies/" + cookies.get('user').userId;
             const response = await fetch(fetchURL);
             const body = await response.json();
 
@@ -213,7 +188,7 @@ function App(props) {
 	 */
 	function getGroupedIncome() {
 		async function getValue() {
-			const fetchURL = Config.fetchURL + "income/groups/" + user.userId;
+			const fetchURL = Config.fetchURL + "income/groups/" + cookies.get('user').userId;
 			const response = await fetch(fetchURL);
 			const body = await response.json();
 			setGroupedIncome(body[0].map(
@@ -233,7 +208,7 @@ function App(props) {
 	 */
 	function getGroupedExpenses() {
 		async function getValue() {
-			const fetchURL = Config.fetchURL + "expenses/groups/" + user.userId;
+			const fetchURL = Config.fetchURL + "expenses/groups/" + cookies.get('user').userId;
 			const response = await fetch(fetchURL);
 			const body = await response.json();
 			setGroupedExpenses(body[0].map(
@@ -253,7 +228,7 @@ function App(props) {
 	 */
 	function getIncome() {
 		async function getValue() {
-            const fetchURL = Config.fetchURL + "income/" + user.userId;
+            const fetchURL = Config.fetchURL + "income/" + cookies.get('user').userId;
             const response = await fetch(fetchURL);
             const body = await response.json();
 			setIncome(body[0].map(
@@ -275,7 +250,7 @@ function App(props) {
 	 */
 	function getExpenses() {
 		async function getValue() {
-            const fetchURL = Config.fetchURL + "expenses/" + user.userId;
+            const fetchURL = Config.fetchURL + "expenses/" + cookies.get('user').userId;
             const response = await fetch(fetchURL);
             const body = await response.json();
 			setExpenses(body[0].map(
@@ -323,18 +298,19 @@ function App(props) {
 	 * @param {Int} frequencyId The selected frequency id.
 	 */
 	function addExpense(amount, categoryId, frequencyId) {
+		console.log(cookies.get('user').userId)
 		const requestOptions = {
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
-				inUserID: user.userId,
+				inUserID: cookies.get('user').userId,
 				inAmount: amount,
 				inCategoryID: categoryId,
 				inFrequencyID: frequencyId
 			})
 		}
 
-		fetch(Config.fetchURL + "expenses/" + user.userId, requestOptions)
+		fetch(Config.fetchURL + "expenses/" + cookies.get('user').userId, requestOptions)
 			.then((response) => {
 				getExpenses();
 				getGroupedExpenses();
@@ -348,7 +324,7 @@ function App(props) {
 	 */
 	function addUser(firstName, surname) {
 		const requestOptions = {
-			method: 'POST',
+			method: 'PUT',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
 				inFirstName: firstName,
@@ -356,15 +332,33 @@ function App(props) {
 			})
 		}
 
-		fetch(Config.fetchURL + "user", requestOptions);
+		fetch(Config.fetchURL + "user", requestOptions)
+			.then((response) => {
+				getAllValues();
+			})
 	}
 
+	/**
+	 * Handles changes to form input fields.
+	 * @param {*} e The event's data.
+	 */
+	function handleChange(e) {
+		e.preventDefault();
+      	const value = e.target.value;
+
+      	setUser({
+          	...user,
+          	[e.target.name]: value
+      	});
+	 }
+	 
 	/**
 	 * Handles form submission.
 	 * @param {*} e The event's data.
 	 */
 	function handleSubmit(e) {
 		e.preventDefault();
+
 		cookies.set('user', { 
 			userId: nextUserId,
 			firstName: user.firstName,
@@ -373,7 +367,7 @@ function App(props) {
 		);
 		
 		addUser(user.firstName, user.surname);
-		setNewUser({value: false});
+		setNewUser(false);
 	}
 
 	var newUser = (
@@ -569,7 +563,7 @@ function App(props) {
 		</body>
 	);
 
-  	return isNewUser.value ? newUser : returnUser;
+  	return isNewUser ? newUser : returnUser;
 }
 
 export default App;
