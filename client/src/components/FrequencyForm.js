@@ -38,6 +38,7 @@ function FrequencyForm(props) {
     function handleSubmit(e) {
         e.preventDefault();
         addFrequency(value);
+        setValue("");
     }
 
     return(

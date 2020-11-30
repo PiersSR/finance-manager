@@ -37,6 +37,8 @@ function Form(props) {
             default:
                 alert("Error: Submission type was not recognised.");
         }
+
+        setValue("");
     }
 
     /// @param e: The element holding the current category value.

@@ -38,6 +38,7 @@ function CategoryForm(props) {
     function handleSubmit(e) {
         e.preventDefault();
         addCategory(value);
+        setValue("");
     }
 
     return(
