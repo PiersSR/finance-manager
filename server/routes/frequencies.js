@@ -64,6 +64,7 @@ router.route('/:userId')
         )
     })
     .post(function(request, response, next) {
+        console.log(request.body.inFrequencyID)
         pool.query("CALL EditFrequency(?, ?)",
             [
                 request.body.inFrequencyID,

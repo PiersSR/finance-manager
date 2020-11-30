@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { PieChart, Pie, Legend, Tooltip, Cell, ResponsiveContainer, Label } from 'recharts';
+import React from 'react';
+import { PieChart, Pie, Legend, Tooltip, Cell, ResponsiveContainer } from 'recharts';
 
 function Chart(props) {
     const COLORS = ['#1d3557', '#457b9d', '#a8dadc', '#e63946', '#f72585', '#b5179e', '#7209b7', '#560bad', '#480ca8', '#3a0ca3', '#3f37c9', '#4361ee', '#4895ef', '#4cc9f0'];
@@ -14,7 +14,7 @@ function Chart(props) {
 	if (props.type === "groupedPieChart") {
 		props.data.map(
 			(obj) => (
-				groupedChartData.push({ "name": obj.Category, "value": obj.Amount })
+				groupedChartData.push({ "name": obj.Category, "value": parseFloat(obj.Amount) })
 			)
 		)
 	}
@@ -22,8 +22,8 @@ function Chart(props) {
 	var ungroupedChart = (
 		<ResponsiveContainer
 			className="chart"
-			width={700}
-			height="31.5%"
+			width={'90%'}
+			height={'33%'}
 		>
 			<PieChart>
 				<Pie 
@@ -52,8 +52,8 @@ function Chart(props) {
 	var groupedChart = (
 		<ResponsiveContainer
 			className="chart"
-			width={700}
-			height="31.5%"
+			width={'90%'}
+			height={'25%'}
 		>
 			<PieChart>
 				<Pie 
@@ -65,7 +65,7 @@ function Chart(props) {
 					cy="50%" 
 					animationEasing="linear"
 				>
-					{chartData.map((entry, index) => <Cell fill={COLORS[index]}/>)}
+					{groupedChartData.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)}
 				</Pie>
 				<Tooltip />
 				<Legend
