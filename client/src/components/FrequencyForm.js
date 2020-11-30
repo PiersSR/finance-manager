@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import Dropdown from './Dropdown';
 import Config from '../data/config';
 
 function FrequencyForm(props) {
     const [value, setValue] = useState();
-    const [category, setCategory] = useState("General");
-    const [frequency, setFrequency] = useState("Monthly");
 
+    /**
+     * Adds a frequency for the user.
+     * @param {string} value The value to add.
+     */
     function addFrequency(value) {
 		const requestOptions = {
 			method: 'PUT',
@@ -22,29 +23,21 @@ function FrequencyForm(props) {
             });
 	}
 
-	function editFrequency(value, newValue) {
-		alert('Not yet implemented')
-	}
-
-	function deleteFrequency(value) {
-		alert('Not yet implemented')
-	}
-
-    /// Handles any changes made to the amount field
+    /**
+     * Handles changes to the input value.
+     * @param {*} e The event's data.
+     */
     function handleChange(e) {
         setValue(e.target.value);
     }
 
-    /// Handles the form submission event
+    /**
+     * Handles form submission.
+     * @param {*} e The event's data.
+     */
     function handleSubmit(e) {
         e.preventDefault();
         addFrequency(value);
-    }
-
-    /// @param e: The element holding the current frequency value
-    /// Gets the category to the current selected value in the frequency dropdown
-    function getFrequency(inFrequency) {
-        setFrequency(inFrequency);
     }
 
     return(
