@@ -16,6 +16,25 @@ router.route('/:userId/:incomeId')
     .all(function(request, response, next) {
         next();
     })
+    .post(function(request, response, next) {
+        pool.query("CALL EditIncome(?, ?, ?, ?, ?)",
+            [
+                request.incomeId,
+                request.userId,
+                request.body.inAmount,
+                request.body.inCategoryID,
+                request.body.inFrequencyID
+            ],
+            function(error, result) {
+                if (error) {
+                    console.log(error.message)
+                    response.status(400).send( { message: 'Something went wrong whilst editing an income: ' + error.message });
+                } else {
+                    response.status(200).json(result);
+                }
+            }
+        )
+    })
     .delete(function(request, response, next) {
         pool.query("CALL DeleteIncome(?, ?)",
             [
@@ -67,35 +86,16 @@ router.route('/:userId')
         )
     })
     .put(function(request, response, next) {
-        const inAmount = parseFloat(request.body.inAmount).toFixed(2);
-
         pool.query("call AddIncome(?, ?, ?, ?)", 
             [
                 request.userId,
                 request.body.inCategoryID,
-                inAmount,
-                request.body.inFrequencyID
-            ],
-            function(error, result) {
-                if (error) {
-                    response.status(400).send({ message: 'Something went wrong whilst adding an income: ' + error.message })
-                } else {
-                    response.status(200).json(result);
-                }
-            }
-        )
-    })
-    .post(function(request, response, next) {
-        pool.query("CALL EditExpense(?, ?, ?, ?)",
-            [
-                request.body.inIncomeID,
-                request.userId,
                 request.body.inAmount,
                 request.body.inFrequencyID
             ],
             function(error, result) {
                 if (error) {
-                    response.status(400).send( { message: 'Something went wrong whilst editing an income: ' + error.message });
+                    response.status(400).send({ message: 'Something went wrong whilst adding an income: ' + error.message })
                 } else {
                     response.status(200).json(result);
                 }

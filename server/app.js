@@ -8,7 +8,7 @@ var cors = require('cors');
 var indexRouter = require('./routes/index');
 var testAPIRouter = require('./routes/testAPI');
 var userRouter = require('./routes/user');
-var expenseRouter = require('./routes/expense');
+var expensesRouter = require('./routes/expenses');
 var incomeRouter = require('./routes/income');
 var categoriesRouter = require('./routes/categories');
 var frequenciesRouter = require('./routes/frequencies');
@@ -19,7 +19,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(cors())
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/testAPI', testAPIRouter);
 app.use('/user', userRouter);
-app.use('/expense', expenseRouter);
+app.use('/expenses', expensesRouter);
 app.use('/income', incomeRouter);
 app.use('/categories', categoriesRouter);
 app.use('/frequencies', frequenciesRouter);
@@ -48,7 +48,7 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+  
   // render the error page
   res.status(err.status || 500);
   res.render('error');

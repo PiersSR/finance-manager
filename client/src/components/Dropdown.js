@@ -1,11 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 function Dropdown(props) {
     const [value, setValue] = useState("N/A");
     
+    /**
+     * Handles changes to the selected value.
+     * @param {*} e The event's data.
+     */
     function handleChange(e) {
         setValue(e.currentTarget.value);
         
+        // Find the category/frequency id based on the selected value.
         const id = props.data.find((obj) => obj.Value === e.currentTarget.value).Id;
 
         switch(props.type) {

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import Dropdown from './Dropdown';
 import Config from '../data/config'
 
 function CategoryForm(props) {
     const [value, setValue] = useState();
-    const [category, setCategory] = useState("General");
-    const [frequency, setFrequency] = useState("Monthly");
 
+    /**
+     * Adds a category for the user.
+     * @param {*} value The input value to add.
+     */
     function addCategory(value) {
 		const requestOptions = {
 			method: 'PUT',
@@ -22,29 +23,21 @@ function CategoryForm(props) {
             });
 	}
 
-	function editCategory(value, newValue) {
-		alert('Not yet implemented')
-	}
-
-	function deleteCategory(value) {
-		alert('Not yet implemented')
-	}
-
-    /// Handles any changes made to the amount field
+    /**
+     * Handles changes made to the form input field.
+     * @param {*} e The event's data.
+     */
     function handleChange(e) {
         setValue(e.target.value);
     }
 
-    /// Handles the form submission event
+    /**
+     * Handles form submission. 
+     * @param {*} e The event's data.
+     */
     function handleSubmit(e) {
         e.preventDefault();
         addCategory(value);
-    }
-
-    /// @param e: The element holding the current category value
-    /// Gets the category to the current selected value in the category dropdown
-    function getCategory(inCategory) {
-        setCategory(inCategory);
     }
 
     return(

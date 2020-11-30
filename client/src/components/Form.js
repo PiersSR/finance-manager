@@ -12,35 +12,41 @@ function Form(props) {
         Value: "N/A"
     });
 
-    /// Handles any changes made to the amount field
+    /**
+     * Handles changes to the input value.
+     * @param {*} e The event's data.
+     */
     function handleChange(e) {
         setValue(e.target.value);
     }
 
-    /// Handles the form submission event
+    /**
+     * Handles form submission.
+     * @param {*} e The event's data.
+     */
     function handleSubmit(e) {
         e.preventDefault();
     
         switch(props.subType) {
             case "income":
-                props.addIncome(amount, category.Id, frequency.Id);
+                props.addIncome(parseFloat(amount).toFixed(2), category.Id, frequency.Id);
                 break;
-            case "expense":
-                props.addExpense(amount, category.Id, frequency.Id);
+            case "expenses":
+                props.addExpense(parseFloat(amount).toFixed(2), category.Id, frequency.Id);
                 break;
             default:
                 alert("Error: Submission type was not recognised.");
         }
     }
 
-    /// @param e: The element holding the current category value
-    /// Gets the category to the current selected value in the category dropdown
+    /// @param e: The element holding the current category value.
+    /// Gets the category to the current selected value in the category dropdown.
     function getCategory(id, category) {
         setCategory({ Id: id, Value: category });
     }
 
-    /// @param e: The element holding the current frequency value
-    /// Gets the category to the current selected value in the frequency dropdown
+    /// @param e: The element holding the current frequency value.
+    /// Gets the category to the current selected value in the frequency dropdown.
     function getFrequency(id, frequency) {
         setFrequency({ Id: id, Value: frequency });
     }
