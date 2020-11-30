@@ -1,58 +1,14 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 html {
   background-color: #a8dadc;
   color: #f1faee;
 }
 
-header {
-  background-color: #1d3557;
-  width: 100%;
-  z-index: 0;
-  position: absolute;
-  top: 0;
-}
-
-body {
-  padding-top: 5rem;
-  position: relative;
+@media screen and (min-height: 1080px) {
+  html {
+    position: fixed;
+    height: 100%;
+    width: 100%
+  }
 }
 
 h2 {
@@ -102,14 +58,16 @@ button {
   display: flex;
   flex-direction: row;
   height: 2rem;
+  width: 4rem;
   justify-content: center;
   align-items: center;
-  margin: 0.5rem 2rem 0.5rem 2rem;
+  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
 }
 
 .tableForm {
   display: flex;
   flex-direction: row;
+  align-items: baseline;
 }
 
 .name {
@@ -118,6 +76,11 @@ button {
   color: #f1faee;
   padding-bottom: 1rem;
   padding-right: 1rem;
+}
+
+.titleBar {
+  background-color: #1d3557;
+  overflow: auto;
 }
 
 .title {
@@ -132,7 +95,7 @@ button {
 .summaryForm {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .summaryValue {
@@ -145,43 +108,53 @@ button {
 .value {
   display: flex;
   flex-direction: column;
-  padding: 1rem 1rem 1rem 1rem;
   font-size: large;
-}
-
-button:hover {
-  
 }
 
 .container {
   display: flex;
-  align-content: space-between;
-  height: 90vh;
   flex-wrap: wrap;
+}
+
+.container .column.content{
+  flex: 1 1 auto;
+}
+
+@media screen and (max-width: 720px) {
+  .tables {
+    flex-direction: row;
+  }
+
+  .charts {
+    flex-direction: row;
+  }
+
+  .forms {
+    flex-direction: row;
+  }
 }
 
 .tables {
   background-color: #a8dadc;
-  flex: 1;
+  flex: 1 1 auto;
   flex-direction: column;
-  justify-content: space-evenly;
-  height: 80vh;
+  justify-content: flex-start;
 }
+
 
 .table {
   background-color: #f1faee;
-  justify-content: center;
+  justify-content: flex-start;
   margin: 1rem;
+  overflow: hidden;
 }
 
 .charts {
   background-color: #a8dadc;
   color: #6e6b75;
-  flex: 1;
-  height: 80vh;
-  align-items: stretch;
+  flex: 1 1 auto;
+  align-items: center;
   justify-content: center;
-  height: 80vh;
 }
 
 .chart {
@@ -192,12 +165,16 @@ button:hover {
   margin: 1rem;
 }
 
-.formsContainer {
+.noData {
+  text-align: center;
+}
+
+.forms {
   background-color: #a8dadc;
   flex-direction: column;
   display: flex;
-  flex: 1;
-  height: 80vh;
+  flex: 1 1 auto;
+  justify-content: flex-start;
 }
 
 .formElement {
@@ -213,6 +190,7 @@ button:hover {
 .formContent {
   display: flex;
   flex-direction: row;
+  align-items: baseline;
 }
 
 .welcomePage {

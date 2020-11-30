@@ -2,8 +2,9 @@
   "name": "api",
   "version": "0.0.0",
   "private": true,
-  "proxy": "http://localhost:8080",
+  "proxy": "http://moneymanager.pr226.brighton.domains/",
   "scripts": {
+    "server": "node app.js",
     "start": "node ./bin/www"
   },
   "dependencies": {
