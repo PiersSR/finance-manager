@@ -371,35 +371,53 @@ function App(props) {
 	}
 
 	var newUser = (
-		<form 
-			className="welcomePage"
-			onSubmit={handleSubmit}
-		>
-			<label>Please enter your name: </label>
-			<input
-				type="text"
-				name="firstName"
-				value={user.firstName}
-				onChange={handleChange}
-				placeholder="First name"
-			>
-			</input>
-			<input
-				type="text"
-				name="surname"
-				value={user.surname}
-				onChange={handleChange}
-				placeholder="Surname"
-			>
-			</input>
-			<button type="submit">
-				Submit
-			</button>
-		</form>
+		<section>
+			<div className="titleBar">
+				<Header
+					title={"Money management tool"}
+					name={""}
+				/>
+			</div>
+			<div className="welcomePageContainer">
+				<section className="forms">
+					<div className="form">
+						<form
+							className="welcomeFormContent"
+							onSubmit={handleSubmit}
+						>
+							<label>Please enter your name: </label>
+							<input
+								className="welcomeFormInput"
+								type="text"
+								name="firstName"
+								value={user.firstName}
+								onChange={handleChange}
+								placeholder="First name"
+							>
+							</input>
+							<input
+								className="welcomeFormInput"
+								type="text"
+								name="surname"
+								value={user.surname}
+								onChange={handleChange}
+								placeholder="Surname"
+							>
+							</input>
+							<button 
+								className="wideAddButton"
+								type="submit">
+								Login
+							</button>
+						</form>
+					</div>
+				</section>
+			</div>
+		</section>
 	);
 
 	var returnUser = (
-		<body>
+		<section>
 			<div className="titleBar">
 				<Header
 					title={"Money management tool"}
@@ -408,14 +426,14 @@ function App(props) {
 			</div>
 			<div className="container">
 				<section className="forms">
-					<div className="formElement">
+					<div className="form">
 						<h2>Summary</h2>
 						<Summary
 							label="Summary"
 							summary={summary[0]}
 						/>
 					</div>
-					<div className = "formElement">
+					<div className = "form">
 						<h2>Income</h2>
 						<Form 
 							type="add"
@@ -426,7 +444,7 @@ function App(props) {
 							categories={categories}
 						/> 
 					</div>
-					<div className="formElement">
+					<div className="form">
 						<h2>Expenses</h2>
 						<Form
 							type="add"
@@ -437,7 +455,7 @@ function App(props) {
 							categories={categories}
 						/> 
 					</div>
-					<div className="formElement">
+					<div className="form">
 						<h2>Categories</h2>
 						<CategoryForm
 							userId={user.userId}
@@ -451,11 +469,12 @@ function App(props) {
 							className={"table"}
 							data={categories}
 							selectableRows={true}
-							scrollHeight="7vh"
+							scrollHeight="15vh"
 							userId={user.userId}
-						/>
+							getAllValues={getAllValues}
+            			/>
 					</div>
-					<div className="formElement">
+					<div className="form">
 						<h2>Frequencies</h2>
 						<FrequencyForm
 							userId={user.userId}
@@ -469,37 +488,39 @@ function App(props) {
 							className={"table"}
 							data={frequencies}
 							selectableRows={true}
-							scrollHeight="7vh"
+							scrollHeight="15vh"
 							userId={user.userId}
-							/>
+							getAllValues={getAllValues}
+						/>
 					</div>
 				</section>
 				<section className="charts">
+					<div className="chartBlock">
 					<h2>Summary of Total income and expenses</h2>
-					{ 
-						summary.length ?
-							<Chart
-								type={"pieChart"}
-								data={summary}
-							/>
-						: 
-							<div className="chart">
-								<h2>No Data</h2>
-							</div>
-					}
+						{ 
+							summary[0].TotalIncome > 0 || summary[0].TotalExpenses > 0 ?
+									<Chart
+										type={"pieChart"}
+										data={summary}
+									/>
+							: 
+									<h3 className="noData">No data to display</h3>
+						}
+					</div>
+					<div className="chartBlock">
 					<h2>Breakdown of income grouped by category</h2>
-					{
-						groupedIncome.length 
-						?
-							<Chart
-								type={"groupedPieChart"}
-								data={groupedIncome}
-							/>
-						: 
-							<div className="chart">
-								<h2>No Data</h2>
-							</div>
-					}
+						{
+							groupedIncome.length 
+							?
+								<Chart
+									type={"groupedPieChart"}
+									data={groupedIncome}
+								/>
+								: 
+									<h3 className="noData">No data to display</h3>
+						}
+					</div>
+					<div className="chartBlock">
 					<h2>Breakdown of expenses grouped by category</h2>
 					{
 						groupedExpenses.length ?
@@ -507,11 +528,10 @@ function App(props) {
 								type={"groupedPieChart"}
 								data={groupedExpenses}
 							/>
-						:
-							<div className="chart">
-								<h2 className="noData">No Data</h2>
-							</div>
+							:
+								<h3 className="noData">No data to display</h3>
 					}
+					</div>
 				</section>
 				<section className="tables">
 					<div className="table">
@@ -521,8 +541,9 @@ function App(props) {
 							type={"income"}
 							data={income}
 							selectableRows={true}
-							scrollHeight="15vh"
+							scrollHeight="20vh"
 							userId={user.userId}
+							getAllValues={getAllValues}
 						/>
 					</div>
 					<div className="table">
@@ -532,8 +553,9 @@ function App(props) {
 							type={"expenses"}
 							data={expenses}
 							selectableRows={true}
-							scrollHeight="15vh"
+							scrollHeight="20vh"
 							userId={user.userId}
+							getAllValues={getAllValues}
 						/>
 					</div>
 					<div className="table">
@@ -543,8 +565,9 @@ function App(props) {
 							type={"income"}
 							data={groupedIncome}
 							selectableRows={false}
-							scrollHeight="15vh"
+							scrollHeight="20vh"
 							userId={user.userId}
+							getAllValues={getAllValues}
 						/>
 					</div>
 					<div className="table">
@@ -554,13 +577,14 @@ function App(props) {
 							type={"expenses"}
 							data={groupedExpenses}
 							selectableRows={false}
-							scrollHeight="15vh"
+							scrollHeight="20vh"
 							userId={user.userId}
+							getAllValues={getAllValues}
 						/>
 					</div>
 				</section>
 			</div>
-		</body>
+		</section>
 	);
 
   	return isNewUser ? newUser : returnUser;

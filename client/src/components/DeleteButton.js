@@ -18,7 +18,7 @@ function DeleteButton(props) {
     }
 
    return(
-       <form onSubmit={handleSubmit}>
+       <form className="tableForm" onSubmit={handleSubmit}>
         <button className="tableButton" type="submit">
             Delete
         </button>

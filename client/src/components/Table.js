@@ -51,8 +51,10 @@ function Table(props) {
     );
 
     function setDisabledRow(row) {
-        if (row.CategoryId === 1 || row.FrequencyId === 1) {
-            return true;
+        if (props.type === "categories" || props.type === "frequencies") {
+            if (row.CategoryId === 1 || row.FrequencyId === 1) {
+                return true;
+            }
         }
     }
     /**
@@ -74,11 +76,11 @@ function Table(props) {
     switch(props.type) {
         case "income":
             columns = incomeColumns;
-            inputType = "number"
+            inputType = "tel"
             break;
         case "expenses":
             columns = expenseColumns;
-            inputType = "number"
+            inputType = "tel"
             break;
         case "categories":
             columns = categoryColumns;
@@ -118,6 +120,7 @@ function Table(props) {
                         rowData={rowData}
                         type={type}
                         inputType={inputType}
+                        getAllValues={props.getAllValues}
                     />,
                     <DeleteButton
                         userId={props.userId}

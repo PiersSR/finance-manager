@@ -43,23 +43,23 @@ function FrequencyForm(props) {
 
     return(
         <form 
-            className="formContent"
+            className="simpleFormContent"
             onSubmit={handleSubmit}
         >
-                <label>Name:</label>
-                <input
-                    type="text"
-                    name="name"
-                    autoComplete="off"
-                    value={value}
-                    onChange={handleChange}
-                />
-                <button 
-                    id="add"
-                    type="submit"
-                >
-                    Add
-                </button>
+            <label>Name:</label>
+            <input
+                type="text"
+                name="name"
+                autoComplete="off"
+                value={value}
+                onChange={handleChange}
+            />
+            <button 
+                id="add"
+                type="submit"
+            >
+                Add
+            </button>
         </form>
     );
 }
