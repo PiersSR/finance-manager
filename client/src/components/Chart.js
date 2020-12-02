@@ -22,8 +22,8 @@ function Chart(props) {
 	var ungroupedChart = (
 		<ResponsiveContainer
 			className="chart"
-			width={'90%'}
-			height={'33%'}
+			width='100%'
+			height='90%'
 		>
 			<PieChart>
 				<Pie 
@@ -33,7 +33,7 @@ function Chart(props) {
 					nameKey="name"
 					cx="50%"
 					cy="50%"
-					outerRadius={100} 
+					outerRadius={150} 
 					animationEasing="linear"
 				>
 					{chartData.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)}
@@ -52,8 +52,8 @@ function Chart(props) {
 	var groupedChart = (
 		<ResponsiveContainer
 			className="chart"
-			width={'90%'}
-			height={'25%'}
+			width='100%'
+			height='90%'
 		>
 			<PieChart>
 				<Pie 
@@ -63,6 +63,7 @@ function Chart(props) {
 					nameKey="name"
 					cx="50%"
 					cy="50%" 
+					outerRadius={150}
 					animationEasing="linear"
 				>
 					{groupedChartData.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)}

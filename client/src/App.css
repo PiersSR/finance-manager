@@ -1,14 +1,8 @@
-html {
+body {
   background-color: #a8dadc;
   color: #f1faee;
-}
-
-@media screen and (min-height: 1080px) {
-  html {
-    position: fixed;
-    height: 100%;
-    width: 100%
-  }
+  display: flex;
+  flex-direction: column;
 }
 
 h2 {
@@ -20,10 +14,12 @@ h2 {
 select {
   border-radius: 0.1rem;
   min-width: 0;
-  width: 10rem;
-  height: 1.5rem;
+  width: 100%;
+  height: 2rem;
   margin-right: 1rem;
   margin-left: 0.2rem;
+  display: flex;
+  flex-grow: 1;
 }
 
 input {
@@ -34,31 +30,41 @@ input {
   min-height: 0;
   display: flex;
   flex-direction: row;
+  flex-grow: 1;
   height: 1.5rem;
+  overflow: auto;
 }
 
 label {
+  width: 100%;
   padding-right: 0.2rem;
+  padding-bottom: 0.2rem;
 }
 
 button {
   font-size: large;
-  width: 10%;
   height: 2rem;
   justify-content: center;
-  align-items: flex-end;
+  align-items: flex-start;
+  flex-grow: 1;
 }
 
 .addButton {
-  height: 2rem;
-  width: 4rem;
+  flex-grow: 1;
+  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
 }
+
+.tableInput {
+  flex: 3;
+}
+
 
 .tableButton {
   display: flex;
   flex-direction: row;
+  flex: 1;
   height: 2rem;
-  width: 4rem;
+  width: 100%;
   justify-content: center;
   align-items: center;
   margin: 0.5rem 0.5rem 0.5rem 0.5rem;
@@ -68,6 +74,8 @@ button {
   display: flex;
   flex-direction: row;
   align-items: baseline;
+  flex-wrap: nowrap;
+  flex-grow: 1;
 }
 
 .name {
@@ -96,11 +104,14 @@ button {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
 .summaryValue {
   font-size: larger;
   min-width: 0;
+  flex: 1;
+  flex-grow: 1;
   border: transparent;
   background-color: transparent;
 }
@@ -109,34 +120,88 @@ button {
   display: flex;
   flex-direction: column;
   font-size: large;
+  flex: 1;
+  width: 33%;
 }
 
 .container {
   display: flex;
+  flex-grow: 1;
   flex-wrap: wrap;
+  flex: 1 100%;
 }
 
-.container .column.content{
-  flex: 1 1 auto;
-}
+@media screen and (max-width: 1400px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    overflow: auto;
+  }
 
-@media screen and (max-width: 720px) {
   .tables {
     flex-direction: row;
+    overflow: auto;
   }
 
   .charts {
-    flex-direction: row;
+    display: flex;
+    overflow: auto;
+    flex-direction: column;
+    min-width: 0;
+    flex-grow: 1;
+    flex: 1;
+  }
+
+  .chartBlock {
+    background-color: #f1faee;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.25rem;
+    flex-grow: 1;
+    margin: 1rem 1rem 1rem 1rem;
+    padding: 1rem 1rem 1rem 1rem;
   }
 
   .forms {
     flex-direction: row;
   }
+
+  .form {
+    background-color: #f1faee;
+    color: #1d3557;
+    border-radius: 0.25rem;
+    margin: 1rem 1rem 1rem 1rem;
+    padding: 1rem 1rem 1rem 1rem;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-grow: 1;
+    flex-direction: column;
+    overflow: auto;
+  }
+
+
+  .formContent {
+    flex-direction: column;
+    overflow: auto;
+    flex-wrap: wrap;
+  }
+
+  .summaryForm {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tableButton {
+    flex: 1;
+    flex-grow: 1;
+  }
 }
 
 .tables {
   background-color: #a8dadc;
-  flex: 1 1 auto;
+  flex-grow: 1;
+  flex: 1 1;
   flex-direction: column;
   justify-content: flex-start;
 }
@@ -146,23 +211,35 @@ button {
   background-color: #f1faee;
   justify-content: flex-start;
   margin: 1rem;
-  overflow: hidden;
+  overflow: auto;
+  flex-grow: 1;
+  flex-wrap: wrap;
 }
 
 .charts {
   background-color: #a8dadc;
   color: #6e6b75;
-  flex: 1 1 auto;
-  align-items: center;
+  flex-grow: 1;
+  flex: 1 1;
   justify-content: center;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
 }
 
-.chart {
+.chartBlock {
   background-color: #f1faee;
   justify-content: center;
   align-items: center;
   border-radius: 0.25rem;
-  margin: 1rem;
+  flex-grow: 1;
+  margin: 1rem 1rem 1rem 1rem;
+  padding: 1rem 1rem 1rem 1rem;
+}
+
+.chart {
+  background-color: #f1faee;
+  border-radius: 0.25rem;
 }
 
 .noData {
@@ -173,32 +250,94 @@ button {
   background-color: #a8dadc;
   flex-direction: column;
   display: flex;
-  flex: 1 1 auto;
   justify-content: flex-start;
+  overflow: auto;
+  flex: 1 1;
 }
 
-.formElement {
+.form {
   background-color: #f1faee;
   color: #1d3557;
   border-radius: 0.25rem;
   margin: 1rem 1rem 1rem 1rem;
   padding: 1rem 1rem 1rem 1rem;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+  flex-grow: 1;
 }
 
 .formContent {
   display: flex;
-  flex-direction: row;
   align-items: baseline;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-wrap: wrap;
+}
+
+.simpleFormContent {
+  display: flex;
+  align-items: baseline;
+  flex-grow: 1;
+  flex-wrap: wrap;
+}
+
+.welcomePageContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .welcomePage {
+  background-color: #f1faee;
+  color: #1d3557;
+  border-radius: 0.25rem;
   display: flex;
-  background-color: #a8dadc;
-  align-items: stretch;
-  justify-content: center;
+  flex-wrap: nowrap;
+  flex-grow: 1;
+}
+
+.welcomeFormContent {
+  display: flex;
+  align-items: baseline;
+  flex-grow: 1;
   flex-direction: column;
-  flex: 1;
+  align-items: center;
+}
+
+.welcomeFormInput {
+  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.welcomePage body {
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.extraInfo {
+  display: none;
+  line-height: 30px;
+  font-size: 12px;
+  position: absolute;
+  top: 0;
+  right: 50px;
+}
+
+.info:hover .extraInfo {
+  display: block;
+}
+
+.info {
+  font-size: 20px;
+  padding-left: 1rem;
+  width: 20px;
+  border-radius: 15px;
+  float: right;
+}
+
+.infoIcon {
+  background: url('./images/help-24px.svg')
+}
+
+* {
+  transition: all .2 ease;
 }
 /* #e63946 #f1faee #a8dadc #457b9d #1d3557 */
