@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Config from '../data/config'
+import { nanoid } from 'nanoid';
 
 function CategoryForm(props) {
     const [value, setValue] = useState();
@@ -43,23 +44,24 @@ function CategoryForm(props) {
 
     return(
         <form 
-            className="formContent"
+            className="simpleFormContent"
             onSubmit={handleSubmit}
         >
-                <label>Name:</label>
-                <input
-                    type="text"
-                    name="name"
-                    autoComplete="off"
-                    value={value}
-                    onChange={handleChange}
-                />
-                <button 
-                    id="add"
-                    type="submit"
-                >
-                    Add
-                </button>
+            <label>Name:</label>
+            <input
+                type="text"
+                name="name"
+                autoComplete="off"
+                value={value}
+                onChange={handleChange}
+            />
+            <button 
+                className="wideAddButton"
+                id={nanoid()}
+                type="submit"
+            >
+                Add
+            </button>
         </form>
     );
 }

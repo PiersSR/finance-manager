@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Config from '../data/config';
+import { nanoid } from 'nanoid';
 
 function EditButton(props) {
     const [value, setValue] = useState();
@@ -21,6 +22,9 @@ function EditButton(props) {
         }
         
         fetch(Config.fetchURL + "income/" + userId + '/' + rowId, requestOptions)
+            .then((response) => {
+                props.getAllValues();
+            });
     }
     
     /**
@@ -37,7 +41,10 @@ function EditButton(props) {
 			})
         }
         
-        fetch(Config.fetchURL + "expense/" + userId + '/' + rowId, requestOptions)
+        fetch(Config.fetchURL + "expenses/" + userId + '/' + rowId, requestOptions)
+            .then((response) => {
+                props.getAllValues();
+            });
     }
 
     /**
@@ -54,6 +61,9 @@ function EditButton(props) {
         }
         
         fetch(Config.fetchURL + "categories/" + userId, requestOptions)
+            .then((response) => {
+                props.getAllValues();
+            });
     }
 
     /**
@@ -70,6 +80,9 @@ function EditButton(props) {
         }
         
         fetch(Config.fetchURL + "frequencies/" + userId, requestOptions)
+            .then((response) => {
+                props.getAllValues();
+            });
     }
 
     /**
@@ -83,7 +96,9 @@ function EditButton(props) {
     /**
      * Handles form submission.
      */
-    function handleSubmit() {
+    function handleSubmit(e) {
+        e.preventDefault();
+
         switch(props.type) {
             case "income":
                 editIncome();
@@ -105,7 +120,8 @@ function EditButton(props) {
     return(
         <form className="tableForm" onSubmit={handleSubmit}>
             <input 
-                placeholder="Enter new value here"
+                className="tableInput"
+                placeholder="New Value"
                 onChange={handleChange}
                 type={props.inputType}
                 value={value}
@@ -113,6 +129,7 @@ function EditButton(props) {
                 min="0.00"
             ></input>
             <button 
+                id={nanoid()}
                 className="tableButton" 
                 type="submit"
             >
