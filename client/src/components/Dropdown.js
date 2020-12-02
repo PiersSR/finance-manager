@@ -27,6 +27,7 @@ function Dropdown(props) {
 
     return (
         <select
+            disabled={props.loading}
             onChange={handleChange}
             value={value}
         >

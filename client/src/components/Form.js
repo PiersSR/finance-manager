@@ -60,7 +60,7 @@ function Form(props) {
         >
             <label>Amount:</label>
             <input
-                type="number"
+                type="tel"
                 name="price"
                 min="0.00"
                 step=".01"
@@ -74,6 +74,7 @@ function Form(props) {
                 type="category"
                 getCategory={getCategory}
                 data={props.categories}
+                loading={props.loading}
             />
             <label>Frequency:</label>
             <Dropdown
@@ -81,6 +82,7 @@ function Form(props) {
                 type="frequency"
                 getFrequency={getFrequency}
                 data={props.frequencies}
+                loading={props.loading}
             />
             <button 
                 className="addButton"
