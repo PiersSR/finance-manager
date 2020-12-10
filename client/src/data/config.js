@@ -1,7 +1,5 @@
-import React from 'react';
-
 const config = {
-    fetchURL: 'http://localhost:9000/'
+    fetchURL: 'http://moneymanager.pr226.brighton.domains/'
 }
 
 export default config;

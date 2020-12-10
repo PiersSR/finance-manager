@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import Config from '../data/config';
 import { nanoid } from 'nanoid';
 
-function EditButton(props) {
+function TableForm(props) {
     const [value, setValue] = useState();
     var userId = props.userId;
     var rowId = props.rowId;
+    const buttons = { editButton: nanoid(), deleteButton: nanoid() }
+    const [clickedButton, setClickedButton] = useState(null);
 
     /**
      * Edits an income value.
@@ -86,11 +88,30 @@ function EditButton(props) {
     }
 
     /**
+     * Handles form submission.
+     */
+    function deleteRow() {
+        const requestOptions = {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        }
+
+        fetch(Config.fetchURL + props.type + '/' + userId + '/' + rowId, requestOptions)
+            .then((response) => {
+                props.getAllValues();
+            });
+    }
+
+    /**
      * Handles changes to the input value.
      * @param {*} e The event's data.
      */
     function handleChange(e) {
         setValue(e.currentTarget.value);
+    }
+
+    function handleClick(e) {
+        setClickedButton(e.target.id);
     }
 
     /**
@@ -99,26 +120,32 @@ function EditButton(props) {
     function handleSubmit(e) {
         e.preventDefault();
 
-        switch(props.type) {
-            case "income":
-                editIncome();
-                break;
-            case "expenses":
-                editExpense();
-                break;
-            case "categories":
-                editCategory();
-                break;
-            case "frequencies":
-                editFrequency();
-                break;
-            default:
-                alert('Type \'' + props.type + '\' was not recognised.')
+        if (clickedButton === "edit") {
+            switch(props.type) {
+                case "income":
+                    editIncome();
+                    break;
+                case "expenses":
+                    editExpense();
+                    break;
+                case "categories":
+                    editCategory();
+                    break;
+                case "frequencies":
+                    editFrequency();
+                    break;
+                default:
+                    alert('Type \'' + props.type + '\' was not recognised.')
+            }
+        } else if (clickedButton === "delete") {
+            deleteRow();
         }
     }
-
-    return(
-        <form className="tableForm" onSubmit={handleSubmit}>
+    
+    return (
+        <form className="tableForm"
+                onSubmit={handleSubmit}
+        >
             <input 
                 className="tableInput"
                 placeholder="New Value"
@@ -129,14 +156,23 @@ function EditButton(props) {
                 min="0.00"
             ></input>
             <button 
-                id={nanoid()}
-                className="tableButton" 
+                id="edit"
+                onClick={handleClick}
+                className="tableButton"
                 type="submit"
             >
                 Edit
             </button>
+            <button
+                id="delete"
+                onClick={handleClick}
+                className="tableButton"
+                type="submit"
+            >
+                Delete
+            </button>
         </form>
-   ) 
+    )
 }
 
-export default EditButton;
+export default TableForm;

@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import DataTable, { createTheme } from 'react-data-table-component';
-import EditButton from './EditButton';
-import DeleteButton from './DeleteButton';
+import TableForm from './TableForm';
 
 const incomeColumns = [
     { name: 'Income', selector: 'Amount', sortable: true, },
@@ -22,6 +21,19 @@ const categoryColumns = [
 const frequencyColumns = [
     { name: 'Frequency', selector: 'Value', sortable: false }
 ]
+
+const customStyles = {
+    contextMenu: {
+        style: {
+            fontSize: '0px'
+        }
+    },
+    tableWrapper: {
+        style: {
+            overflow: 'auto'
+        }
+    }
+}
 
 /**
  * Create's a custom table theme.
@@ -98,6 +110,7 @@ function Table(props) {
         <div className={props.className}>
             <DataTable
                 title={props.title}
+                className={"rdt_TableHeader"}
                 dense={props.dense}
                 type={props.type}
                 theme={"money"}
@@ -113,19 +126,15 @@ function Table(props) {
                 clearSelectedRows={isRowAlreadySelected}
                 selectableRowsNoSelectAll={true}
                 selectableRowDisabled={setDisabledRow}
+                customStyles={customStyles}
                 contextActions={[
-                    <EditButton 
+                    <TableForm 
                         userId={props.userId}
                         rowId={rowId}
                         rowData={rowData}
                         type={type}
                         inputType={inputType}
                         getAllValues={props.getAllValues}
-                    />,
-                    <DeleteButton
-                        userId={props.userId}
-                        rowId={rowId}
-                        type={type}
                     />
                 ]}
             />
