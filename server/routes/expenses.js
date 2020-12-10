@@ -27,9 +27,9 @@ router.route('/:userId/:expenseId')
             ],
             function(error, result) {
                 if (error) {
-                    response.status(400).send( { message: 'Something went wrong whilst adding an expense: ' + error.message });
+                    response.status(401).send( { message: 'Something went wrong whilst adding an expense: ' + error.message });
                 } else {
-                    response.status(200).json(result);
+                    response.status(201).json(result);
                 }
             }
         )
@@ -42,10 +42,9 @@ router.route('/:userId/:expenseId')
             ],
             function(error, result) {
                 if (error) {
-                    console.log(error)
-                    response.status(400).send({ message: 'Something went wrong whilst deleting an expense: ' + error.message })
+                    response.status(401).send({ message: 'Something went wrong whilst deleting an expense: ' + error.message })
                 } else {
-                    response.status(200).json(result);
+                    response.status(201).json(result);
                 }
             }
         )
@@ -60,9 +59,9 @@ router.route('/groups/:userId')
             request.userId,
             function(error, result) {
                 if (error) {
-                    response.status(400).send({ message: 'Something went wrong whilst getting expense by category: ' + error.message });
+                    response.status(401).send({ message: 'Something went wrong whilst getting expense by category: ' + error.message });
                 } else {
-                    response.status(200).json(result);
+                    response.status(201).json(result);
                 }
             }
         )
@@ -77,15 +76,14 @@ router.route('/:userId')
             request.userId,
             function(error, result) {
                 if (error) {
-                    response.status(400).send({ message: 'Something went wrong whilst getting an expense: ' + error.message })
+                    response.status(401).send({ message: 'Something went wrong whilst getting an expense: ' + error.message })
                 } else {
-                    response.status(200).json(result)
+                    response.status(201).json(result)
                 }
             }
         )
     })
     .put(function(request, response, next) {
-        console.log(request.userId + "cat:" + request.body.inCategoryID + "amo: " + request.body.inAmount + "fre " + request.body.inFrequencyID)
         pool.query("call AddExpense(?, ?, ?, ?)", 
             [
                 request.userId,
@@ -95,10 +93,9 @@ router.route('/:userId')
             ],
             function(error, result) {
                 if (error) {
-                    console.log(error.message)
-                    response.status(400).send( { message: 'Something went wrong whilst adding an expense: ' + error.message });
+                    response.status(401).send( { message: 'Something went wrong whilst adding an expense: ' + error.message });
                 } else {
-                    response.status(200).json(result);
+                    response.status(201).json(result);
                 }
             }
         )

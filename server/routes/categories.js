@@ -24,9 +24,9 @@ router.route('/:userId/:categoryId')
             ],
             function(error, result) {
                 if (error) {
-                    response.status(400).send({ message: 'Something went wrong whilst deleting a category: ' + error.message })
+                    response.status(401).send({ message: 'Something went wrong whilst deleting a category: ' + error.message })
                 } else {
-                    response.status(200).json(result);
+                    response.status(201).json(result);
                 }
             }
         )
@@ -41,9 +41,9 @@ router.route('/:userId')
             request.userId,
             function(error, result) {
                 if (error) {
-                    response.status(400).send({ message: 'Something went wrong whilst getting categories: ' + error.message });
+                    response.status(401).send({ message: 'Something went wrong whilst getting categories: ' + error.message });
                 } else {
-                    response.status(200).json(result);
+                    response.status(201).json(result);
                 }
             }
         )
@@ -56,9 +56,9 @@ router.route('/:userId')
             ],
             function(error, result) {
                 if (error) {
-                    response.status(400).send({ message: 'Something went wrong whilst adding a category: ' + error.message });
+                    response.status(401).send({ message: 'Something went wrong whilst adding a category: ' + error.message });
                 } else {
-                    response.status(200).json(result);
+                    response.status(201).json(result);
                 }
             }
         )
@@ -71,9 +71,9 @@ router.route('/:userId')
             ],
             function(error, result) {
                 if (error) {
-                    response.status(400).send({ message: 'Something went wrong whilst editing a category: ' + error.message });
+                    response.status(401).send({ message: 'Something went wrong whilst editing a category: ' + error.message });
                 } else {
-                    response.status(200).json(result);
+                    response.status(201).json(result);
                 }
             }
         )

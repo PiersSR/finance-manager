@@ -82,7 +82,7 @@ function App(props) {
 	 */
 	useEffect(() => {
 		var cookie = cookies.get('user');
-		console.log(cookie);
+
 		if (cookie === undefined) {
 			const fetchURL = Config.fetchURL + 'user/';
 			fetch(fetchURL)
@@ -301,7 +301,6 @@ function App(props) {
 	 * @param {Int} frequencyId The selected frequency id.
 	 */
 	function addExpense(amount, categoryId, frequencyId) {
-		console.log(cookies.get('user').userId)
 		const requestOptions = {
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json' },

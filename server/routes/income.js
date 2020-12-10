@@ -27,7 +27,6 @@ router.route('/:userId/:incomeId')
             ],
             function(error, result) {
                 if (error) {
-                    console.log(error.message)
                     response.status(401).send( { message: 'Something went wrong whilst editing an income: ' + error.message });
                 } else {
                     response.status(201).json(result);
@@ -60,7 +59,6 @@ router.route('/groups/:userId')
             request.userId, 
             function(error, result) {
                 if (error) {
-                    console.log(error.message)
                     response.status(401).send({ message: 'Something went wrong whilst getting income by category: ' + error.message });
                 } else {
                     response.status(201).json(result);

@@ -11,9 +11,9 @@ router.route('/')
 			function(error, result) {
 				if (error) {
 					console.error(error.stack);
-					response.status(400).send({ message: 'Something went wrong whilst getting the next user Id: ' + error.message });
+					response.status(401).send({ message: 'Something went wrong whilst getting the next user Id: ' + error.message });
 				} else {
-					response.status(200).json(result);
+					response.status(201).json(result);
 				}
 			}
 		)
@@ -26,9 +26,9 @@ router.route('/')
 			],
 			function(error, result) {
 				if (error) {
-					response.status(400).send( { message: 'Something went wrong whilst adding a user: ' + error.message });
+					response.status(401).send( { message: 'Something went wrong whilst adding a user: ' + error.message });
 				} else {
-					response.status(200).json(result);
+					response.status(201).json(result);
 				}
 			}
 		)
