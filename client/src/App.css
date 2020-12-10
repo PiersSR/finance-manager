@@ -1,3 +1,75 @@
+@media screen and (max-width: 1400px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    overflow: auto;
+  }
+
+  .tables {
+    flex-direction: row;
+    overflow: auto;
+  }
+
+  .charts {
+    display: flex;
+    overflow: auto;
+    flex-direction: column;
+    min-width: 0;
+    flex-grow: 1;
+    flex: 1;
+  }
+
+  .chartBlock {
+    background-color: #f1faee;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.25rem;
+    flex-grow: 1;
+    margin: 1rem 1rem 1rem 1rem;
+    padding: 1rem 1rem 1rem 1rem;
+  }
+
+  .forms {
+    flex-direction: row;
+  }
+
+  .form {
+    background-color: #f1faee;
+    color: #1d3557;
+    border-radius: 0.25rem;
+    margin: 1rem 1rem 1rem 1rem;
+    padding: 1rem 1rem 1rem 1rem;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-grow: 1;
+    flex-direction: column;
+    overflow: auto;
+  }
+
+
+  .formContent {
+    flex-direction: column;
+    overflow: auto;
+    flex-wrap: wrap;
+  }
+
+  .summaryForm {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tableButton {
+    flex: 1;
+    flex-grow: 1;
+  }
+}
+
+.rdt_TableHeader {
+  overflow: auto;
+  flex-wrap: wrap;
+}
+
 body {
   background-color: #a8dadc;
   color: #f1faee;
@@ -14,10 +86,9 @@ h2 {
 select {
   border-radius: 0.1rem;
   min-width: 0;
-  width: 100%;
+  width: 90%;
   height: 2rem;
-  margin-right: 1rem;
-  margin-left: 0.2rem;
+  margin: 1rem 1rem 1rem 1rem;
   display: flex;
   flex-grow: 1;
 }
@@ -26,6 +97,7 @@ input {
   box-sizing: content-box;
   padding-left: 0.2rem;
   margin-right: 0.5rem;
+  width: 90%;
   min-width: 0;
   min-height: 0;
   display: flex;
@@ -33,6 +105,7 @@ input {
   flex-grow: 1;
   height: 1.5rem;
   overflow: auto;
+  margin: 1rem 1rem 1rem 1rem;
 }
 
 label {
@@ -47,11 +120,13 @@ button {
   justify-content: center;
   align-items: flex-start;
   flex-grow: 1;
+  margin: 1rem 1rem 1rem 1rem;
+  width: 90%;
 }
 
 .addButton {
   flex-grow: 1;
-  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+  margin: 1rem 1rem 1rem 1rem;
 }
 
 .tableInput {
@@ -129,73 +204,6 @@ button {
   flex-grow: 1;
   flex-wrap: wrap;
   flex: 1 100%;
-}
-
-@media screen and (max-width: 1400px) {
-  .container {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    overflow: auto;
-  }
-
-  .tables {
-    flex-direction: row;
-    overflow: auto;
-  }
-
-  .charts {
-    display: flex;
-    overflow: auto;
-    flex-direction: column;
-    min-width: 0;
-    flex-grow: 1;
-    flex: 1;
-  }
-
-  .chartBlock {
-    background-color: #f1faee;
-    justify-content: center;
-    align-items: center;
-    border-radius: 0.25rem;
-    flex-grow: 1;
-    margin: 1rem 1rem 1rem 1rem;
-    padding: 1rem 1rem 1rem 1rem;
-  }
-
-  .forms {
-    flex-direction: row;
-  }
-
-  .form {
-    background-color: #f1faee;
-    color: #1d3557;
-    border-radius: 0.25rem;
-    margin: 1rem 1rem 1rem 1rem;
-    padding: 1rem 1rem 1rem 1rem;
-    display: flex;
-    flex-wrap: nowrap;
-    flex-grow: 1;
-    flex-direction: column;
-    overflow: auto;
-  }
-
-
-  .formContent {
-    flex-direction: column;
-    overflow: auto;
-    flex-wrap: wrap;
-  }
-
-  .summaryForm {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .tableButton {
-    flex: 1;
-    flex-grow: 1;
-  }
 }
 
 .tables {
@@ -311,33 +319,3 @@ button {
   flex-direction: column;
   flex-grow: 1;
 }
-
-.extraInfo {
-  display: none;
-  line-height: 30px;
-  font-size: 12px;
-  position: absolute;
-  top: 0;
-  right: 50px;
-}
-
-.info:hover .extraInfo {
-  display: block;
-}
-
-.info {
-  font-size: 20px;
-  padding-left: 1rem;
-  width: 20px;
-  border-radius: 15px;
-  float: right;
-}
-
-.infoIcon {
-  background: url('./images/help-24px.svg')
-}
-
-* {
-  transition: all .2 ease;
-}
-/* #e63946 #f1faee #a8dadc #457b9d #1d3557 */

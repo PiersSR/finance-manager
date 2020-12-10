@@ -2,13 +2,16 @@ import './App.css';
 import Config from './data/config.js';
 import Form from "./components/Form";
 import Summary from "./components/Summary";
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Chart from './components/Chart';
 import Table from './components/Table';
 import Cookies from 'universal-cookie';
 import Header from './components/Header'
 import CategoryForm from './components/CategoryForm'
 import FrequencyForm from './components/FrequencyForm'
+import ReactTooltip from 'react-tooltip';
+import { MdInfoOutline } from 'react-icons/md';
+import Popup from 'reactjs-popup';
 
 function App(props) {
 	const cookies = new Cookies();
@@ -337,7 +340,7 @@ function App(props) {
 				getAllValues();
 			})
 	}
-
+	
 	/**
 	 * Handles changes to form input fields.
 	 * @param {*} e The event's data.
@@ -365,7 +368,8 @@ function App(props) {
 			surname: user.surname
 			}
 		);
-		
+
+		setUser({ userId: nextUserId });
 		addUser(user.firstName, user.surname);
 		setNewUser(false);
 	}
@@ -427,15 +431,25 @@ function App(props) {
 			<div className="container">
 				<section className="forms">
 					<div className="form">
-						<h2>Summary</h2>
+						<h2>Summary <MdInfoOutline data-tip data-for="summaryTip"/></h2>
+						<ReactTooltip
+							id="summaryTip"
+							place="top"
+							effect="solid"
+						>
+							The summary section displays a breakdown of your income and expenses.
+						</ReactTooltip>
 						<Summary
-							label="Summary"
+							label="Income - Expenses"
 							summary={summary[0]}
 						/>
 					</div>
-					<div className = "form">
-						<h2>Income</h2>
-						<Form 
+					<div className="form">
+						<h2>Income <MdInfoOutline data-tip data-for="incomeTip"/></h2>
+						<ReactTooltip id="incomeTip" place="top" effect="solid">
+							Use the input field and dropdown boxes to add an income source.
+						</ReactTooltip>
+						<Form
 							type="add"
 							subType="income"
 							userId={user.userId}
@@ -445,7 +459,10 @@ function App(props) {
 						/> 
 					</div>
 					<div className="form">
-						<h2>Expenses</h2>
+						<h2>Expenses <MdInfoOutline data-tip data-for="expensesTip"/></h2>
+						<ReactTooltip id="expensesTip" place="top" effect="solid">
+							Use the input field and dropdown boxes to add a recurring expenditure.
+						</ReactTooltip>
 						<Form
 							type="add"
 							subType="expenses"
@@ -453,10 +470,13 @@ function App(props) {
 							addExpense={addExpense}
 							frequencies={frequencies}
 							categories={categories}
-						/> 
+						/>
 					</div>
 					<div className="form">
-						<h2>Categories</h2>
+						<h2>Categories <MdInfoOutline data-tip data-for="categoriesTip"/></h2>
+						<ReactTooltip id="categoriesTip" place="top" effect="solid">
+							Use the input field to add a new category.
+						</ReactTooltip>
 						<CategoryForm
 							userId={user.userId}
 							data={categories}
@@ -475,7 +495,10 @@ function App(props) {
             			/>
 					</div>
 					<div className="form">
-						<h2>Frequencies</h2>
+						<h2>Frequencies <MdInfoOutline data-tip data-for="frequenciesTip"/></h2>
+						<ReactTooltip id="frequenciesTip" place="top" effect="solid">
+							Use the input field to add a new frequency.
+						</ReactTooltip>
 						<FrequencyForm
 							userId={user.userId}
 							data={frequencies}
@@ -499,12 +522,12 @@ function App(props) {
 					<h2>Summary of Total income and expenses</h2>
 						{ 
 							summary[0].TotalIncome > 0 || summary[0].TotalExpenses > 0 ?
-									<Chart
-										type={"pieChart"}
-										data={summary}
-									/>
+								<Chart
+									type={"pieChart"}
+									data={summary}
+								/>
 							: 
-									<h3 className="noData">No data to display</h3>
+								<h3 className="noData">No data to display</h3>
 						}
 					</div>
 					<div className="chartBlock">

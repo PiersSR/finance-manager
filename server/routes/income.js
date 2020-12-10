@@ -28,9 +28,9 @@ router.route('/:userId/:incomeId')
             function(error, result) {
                 if (error) {
                     console.log(error.message)
-                    response.status(400).send( { message: 'Something went wrong whilst editing an income: ' + error.message });
+                    response.status(401).send( { message: 'Something went wrong whilst editing an income: ' + error.message });
                 } else {
-                    response.status(200).json(result);
+                    response.status(201).json(result);
                 }
             }
         )
@@ -43,9 +43,9 @@ router.route('/:userId/:incomeId')
             ],
             function(error, result) {
                 if (error) {
-                    response.status(400).send({ message: 'Something went wrong whilst deleting an income: ' + error.message })
+                    response.status(401).send({ message: 'Something went wrong whilst deleting an income: ' + error.message })
                 } else {
-                    response.status(200).json(result);
+                    response.status(201).json(result);
                 }
             }
         )
@@ -61,9 +61,9 @@ router.route('/groups/:userId')
             function(error, result) {
                 if (error) {
                     console.log(error.message)
-                    response.status(400).send({ message: 'Something went wrong whilst getting income by category: ' + error.message });
+                    response.status(401).send({ message: 'Something went wrong whilst getting income by category: ' + error.message });
                 } else {
-                    response.status(200).json(result);
+                    response.status(201).json(result);
                 }
             }
         )
@@ -78,9 +78,9 @@ router.route('/:userId')
             request.userId, 
             function(error, result) {
                 if (error) {
-                    response.status(400).send({ message: 'Something went wrong whilst getting income: ' + error.message });
+                    response.status(401).send({ message: 'Something went wrong whilst getting income: ' + error.message });
                 } else {
-                    response.status(200).json(result);
+                    response.status(201).json(result);
                 }
             }
         )
@@ -95,9 +95,9 @@ router.route('/:userId')
             ],
             function(error, result) {
                 if (error) {
-                    response.status(400).send({ message: 'Something went wrong whilst adding an income: ' + error.message })
+                    response.status(401).send({ message: 'Something went wrong whilst adding an income: ' + error.message })
                 } else {
-                    response.status(200).json(result);
+                    response.status(201).json(result);
                 }
             }
         )
