@@ -9,12 +9,12 @@ The money management tool is design to help make managing your personal finances
 * Chart visualisations of user data
 
 ## Future possibilites
-[] Banking API Integration
-[] Login system
-[] Feature separation
-[] Customisable charts
-[] CSS refactor
-[] Error handling improvements
+ [ ] Banking API Integration
+ [ ] Login system
+ [ ] Feature separation
+ [ ] Customisable charts
+ [ ] CSS refactor
+ [ ] Error handling improvements
 
 ## Built with:
 * [React](https://reactjs.org/) - Front-End Framework
