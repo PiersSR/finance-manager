@@ -61,6 +61,7 @@ function Form(props) {
             <label>Amount:</label>
             <input
                 type="tel"
+                placeholder="Enter an income amount..."
                 name="price"
                 min="0.00"
                 step=".01"
